@@ -1,0 +1,8 @@
+create table centro_recebimento (
+	id_centro_recebimento SERIAL not null,
+	nome_completo_centro_recebimento varchar (256) not null,
+	cpf_cnpj varchar (18) not null,
+	telefone_centro_recebimento varchar(16),
+	nome_centro_recebimento varchar(256),
+	senha_centro_recebimento varchar(256)
+	);
