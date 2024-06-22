@@ -1,0 +1,12 @@
+create table endereco_doadores (
+	id_endereco_doador SERIAL not null,
+	id_doador int not null,
+	rua_doador varchar (256) not null,
+	bairro_doador varchar (256) not null,
+	numero_doador varchar (256) not null,
+	complemento_doador varchar (256),
+	cep_doador int not null,
+	cidade_doador varchar (256),
+	uf_doador varchar (254),
+	primary key (id_endereco_doador),
+	foreign key (id_doador) references doadores (id_doador))
