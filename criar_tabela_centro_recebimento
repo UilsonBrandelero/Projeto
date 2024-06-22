@@ -4,5 +4,5 @@ create table centro_recebimento (
 	cpf_cnpj varchar (18) not null,
 	telefone_centro_recebimento varchar(16),
 	nome_centro_recebimento varchar(256),
-	senha_centro_recebimento varchar(256)
-	);
+	senha_centro_recebimento varchar(256),
+	primary key (id_centro_recebimento))
