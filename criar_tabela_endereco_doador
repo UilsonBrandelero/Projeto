@@ -5,7 +5,7 @@ create table endereco_doadores (
 	bairro_doador varchar (256) not null,
 	numero_doador varchar (256) not null,
 	complemento_doador varchar (256),
-	cep_doador int not null,
+	cep_doador varchar (256) not null,
 	cidade_doador varchar (256),
 	uf_doador varchar (254),
 	primary key (id_endereco_doador),
