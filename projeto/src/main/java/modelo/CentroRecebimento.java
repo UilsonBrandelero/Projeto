@@ -5,27 +5,37 @@
 package modelo;
 
 /**
-Classe modelo com as informacoes de um centro de recebimento
-* Com seus construtores e sus metodos
+ * Classe modelo com as informacoes de um centro de recebimento Com seus
+ * construtores e sus metodos
  */
 public class CentroRecebimento {
+
     private String nome;
     private String cpf_cnpj;
     private String telefone;
-    private String eMail;
+    private String email;
     private String nomeCentroRecebimento;
     private String senha;
     private int idCentroRebebimento;
+    private CentroRecebimento centroRecebimento;
 
     public CentroRecebimento() {
     }
-    
+
+    public CentroRecebimento(CentroRecebimento centroRecebimento) {
+        this.nome = centroRecebimento.getNome();
+        this.cpf_cnpj = centroRecebimento.getCpf_cnpj();
+        this.telefone = centroRecebimento.getTelefone();
+        this.email = centroRecebimento.getEmail();
+        this.nomeCentroRecebimento = centroRecebimento.getNomeCentroRecebimento();
+
+    }
 
     public CentroRecebimento(String nome, String cpf_cnpj, String telefone, String eMail, String nomeCentroRecebimento, String senha) {
         this.nome = nome;
         this.cpf_cnpj = cpf_cnpj;
         this.telefone = telefone;
-        this.eMail = eMail;
+        this.email = eMail;
         this.nomeCentroRecebimento = nomeCentroRecebimento;
         this.senha = senha;
     }
@@ -34,7 +44,7 @@ public class CentroRecebimento {
         this.nome = nome;
         this.cpf_cnpj = cpf_cnpj;
         this.telefone = telefone;
-        this.eMail = eMail;
+        this.email = eMail;
         this.nomeCentroRecebimento = nomeCentroRecebimento;
         this.senha = senha;
         this.idCentroRebebimento = idCentroRebebimento;
@@ -64,12 +74,12 @@ public class CentroRecebimento {
         this.telefone = telefone;
     }
 
-    public String geteMail() {
-        return eMail;
+    public String getEmail() {
+        return email;
     }
 
-    public void seteMail(String eMail) {
-        this.eMail = eMail;
+    public void setEmail(String eMail) {
+        this.email = eMail;
     }
 
     public String getNomeCentroRecebimento() {
@@ -95,9 +105,5 @@ public class CentroRecebimento {
     public void setIdCentroRebebimento(int idCentroRebebimento) {
         this.idCentroRebebimento = idCentroRebebimento;
     }
-    
-    
-    
-    
-            
+
 }

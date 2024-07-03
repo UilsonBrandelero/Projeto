@@ -105,10 +105,8 @@
                                       <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
                                           <Component id="jtfEmail" alignment="0" pref="446" max="32767" attributes="0"/>
                                           <Component id="jtfNome" alignment="0" max="32767" attributes="0"/>
-                                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                              <Component id="jtfTelefone" alignment="0" max="32767" attributes="0"/>
-                                              <Component id="jtfCpf" alignment="0" pref="214" max="32767" attributes="0"/>
-                                          </Group>
+                                          <Component id="jtfTelefone" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="jtfCpf" alignment="0" pref="214" max="32767" attributes="0"/>
                                       </Group>
                                       <Component id="jtfSenha" alignment="0" min="-2" pref="286" max="-2" attributes="0"/>
                                       <Component id="jtfConfirmarSenha" min="-2" pref="286" max="-2" attributes="0"/>

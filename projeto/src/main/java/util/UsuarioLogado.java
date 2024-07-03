@@ -61,6 +61,12 @@ public class UsuarioLogado {
     public static void setCentroLogado(CentroRecebimento centroLogado) {
         UsuarioLogado.centroLogado = centroLogado;
     }
-    
+    public void logOf(){
+        this.centroLogado = null;
+        this.doadorLogado = null;
+        this.enderecoUsuarioLogago= null;
+        this.idUsuario = 0;
+        this.tipoUsuario = null;
+    }
 
 }

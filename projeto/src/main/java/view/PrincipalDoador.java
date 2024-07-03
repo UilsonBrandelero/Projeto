@@ -5,13 +5,17 @@
 package view;
 
 import java.util.List;
+import javax.swing.JOptionPane;
 import modelo.Cidade;
 import modelo.Doador;
 import modelo.Endereco;
 import modelo.Estado;
 import servico.CidadeServico;
+import servico.DoadorServico;
+import servico.EnderecoServico;
 import servico.EstadoServico;
 import util.UsuarioLogado;
+import util.VerificaCpf;
 
 /**
  *
@@ -38,7 +42,6 @@ public class PrincipalDoador extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
         painelDoador = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -68,6 +71,7 @@ public class PrincipalDoador extends javax.swing.JFrame {
         jtfAlterarCpfCnpj = new javax.swing.JTextField();
         jtfAlterarTelefone = new javax.swing.JTextField();
         jtfAlterarEmail = new javax.swing.JTextField();
+        jbAtualizarDados = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
@@ -83,13 +87,14 @@ public class PrincipalDoador extends javax.swing.JFrame {
         jtfAlterarBairro = new javax.swing.JTextField();
         jtfAlterarNumero = new javax.swing.JTextField();
         jtfAlterarComplemento = new javax.swing.JTextField();
+        jbAtualizarEndereco = new javax.swing.JButton();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jbSair = new javax.swing.JButton();
         jlBemVindo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(899, 650));
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
-        jLabel1.setText("Doador");
 
         painelDoador.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         painelDoador.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -308,6 +313,14 @@ public class PrincipalDoador extends javax.swing.JFrame {
 
         jtfAlterarEmail.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
+        jbAtualizarDados.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jbAtualizarDados.setText("Salvar Alterações");
+        jbAtualizarDados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbAtualizarDadosActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
@@ -320,14 +333,16 @@ public class PrincipalDoador extends javax.swing.JFrame {
                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jtfAlterarNome)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jtfAlterarCpfCnpj, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jtfAlterarTelefone, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE))
-                        .addGap(106, 106, 106))
-                    .addComponent(jtfAlterarEmail))
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jbAtualizarDados)
+                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jtfAlterarNome)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jtfAlterarCpfCnpj, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jtfAlterarTelefone, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE))
+                            .addGap(106, 106, 106))
+                        .addComponent(jtfAlterarEmail)))
                 .addContainerGap(114, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
@@ -349,7 +364,9 @@ public class PrincipalDoador extends javax.swing.JFrame {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
                     .addComponent(jtfAlterarEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(301, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 211, Short.MAX_VALUE)
+                .addComponent(jbAtualizarDados)
+                .addGap(70, 70, 70))
         );
 
         jTabbedPane1.addTab("Dados Pessoais", jPanel7);
@@ -382,6 +399,11 @@ public class PrincipalDoador extends javax.swing.JFrame {
         });
 
         jtfAlterarCep.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jtfAlterarCep.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtfAlterarCepFocusGained(evt);
+            }
+        });
 
         jtfAlterarRua.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
@@ -391,33 +413,46 @@ public class PrincipalDoador extends javax.swing.JFrame {
 
         jtfAlterarComplemento.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
+        jbAtualizarEndereco.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jbAtualizarEndereco.setText("Salvar Atualização");
+        jbAtualizarEndereco.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbAtualizarEnderecoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, 61, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(cbCidadeAlterar, 0, 177, Short.MAX_VALUE)
-                                .addComponent(cbEstadoAlterar, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jtfAlterarNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jtfAlterarCep, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jtfAlterarRua, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jtfAlterarBairro, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jtfAlterarComplemento))
+                            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel8Layout.createSequentialGroup()
+                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, 61, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(cbCidadeAlterar, 0, 177, Short.MAX_VALUE)
+                                        .addComponent(cbEstadoAlterar, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jtfAlterarNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jtfAlterarCep, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jtfAlterarRua, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jtfAlterarBairro, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jtfAlterarComplemento)))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGap(97, 97, 97)
+                        .addComponent(jbAtualizarEndereco)))
                 .addContainerGap(176, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
@@ -451,7 +486,9 @@ public class PrincipalDoador extends javax.swing.JFrame {
                 .addComponent(jLabel19)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jtfAlterarComplemento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(107, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                .addComponent(jbAtualizarEndereco)
+                .addGap(34, 34, 34))
         );
 
         jTabbedPane1.addTab("Endereco", jPanel8);
@@ -469,46 +506,80 @@ public class PrincipalDoador extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(151, Short.MAX_VALUE))
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 489, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(139, Short.MAX_VALUE))
         );
 
         painelDoador.addTab("Alterar Dados", jPanel3);
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel1.setText("Doador");
+
+        jbSair.setText("Sair");
+        jbSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbSairActionPerformed(evt);
+            }
+        });
+
         jlBemVindo.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jlBemVindo.setText("Lable bem-vindo");
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(207, 207, 207)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                        .addComponent(jbSair)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                        .addComponent(jlBemVindo, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(24, 24, 24))))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addComponent(jbSair)
+                .addGap(18, 18, 18)
+                .addComponent(jlBemVindo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(27, 27, 27))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(228, 228, 228)
-                .addComponent(jlBemVindo, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
             .addComponent(painelDoador)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(jlBemVindo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jLabel1))
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(painelDoador))
         );
 
-        setSize(new java.awt.Dimension(913, 619));
+        setSize(new java.awt.Dimension(913, 665));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void botaoSalvarDoacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSalvarDoacaoActionPerformed
         painelDoador.setSelectedIndex(0);
+
 
     }//GEN-LAST:event_botaoSalvarDoacaoActionPerformed
 
@@ -527,10 +598,47 @@ public class PrincipalDoador extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_painelDoadorStateChanged
 
+    private void jbAtualizarDadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAtualizarDadosActionPerformed
+        boolean validacao = validarDadosPessoais();
+        if (validacao == true) {
+            int v = JOptionPane.showConfirmDialog(this, "Deseja realmente alterar seus dados pessoais", "", JOptionPane.YES_NO_OPTION);
+            if (v == 0) {
+                atualizarDados();
+            }
+        }
+    }//GEN-LAST:event_jbAtualizarDadosActionPerformed
+
+    private void jbAtualizarEnderecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAtualizarEnderecoActionPerformed
+        boolean validacao = validarEndereco();
+        if (validarEndereco() == true) {
+            int v = JOptionPane.showConfirmDialog(this, "Deseja realmente alterar seu endereço", "", JOptionPane.YES_NO_OPTION);
+            if (v == 0) {
+                atualizarEndereco();
+
+            }
+        }
+    }//GEN-LAST:event_jbAtualizarEnderecoActionPerformed
+
+    private void jtfAlterarCepFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfAlterarCepFocusGained
+        jbAtualizarEndereco.setEnabled(true);
+    }//GEN-LAST:event_jtfAlterarCepFocusGained
+
+    private void jbSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSairActionPerformed
+        int v = JOptionPane.showConfirmDialog(this, "Realmente deseja Sair?", "Sair", JOptionPane.YES_NO_OPTION);
+        if (v == 0) {
+            UsuarioLogado usuarioLogOf = new UsuarioLogado();
+            usuarioLogOf.logOf();
+            BoasVindas boasVindas = new BoasVindas();
+            boasVindas.setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_jbSairActionPerformed
+
     /*Metodo que utiliza dos dados salvos na classe UsuarioLogado para definir
     os campos de alteração de dados
      */
     public void preencheCamposAlteracao() {
+
         //Preenche os campos de dados pessoais 
         jtfAlterarNome.setText(doadorLogado.getNome());
         jtfAlterarCpfCnpj.setText(doadorLogado.getCpf_cnpj());
@@ -552,6 +660,8 @@ public class PrincipalDoador extends javax.swing.JFrame {
     E definir o Estado e Cidade do usuaro
      */
     public void populaEstado() {
+        cbEstadoAlterar.removeAllItems();
+
         EstadoServico estadosServico = new EstadoServico();//Obijeto para realizar buscas no banco de dados
         List<Estado> estados = estadosServico.listaEstados();// Criação da lista com as siglas dos estados
 
@@ -571,6 +681,7 @@ public class PrincipalDoador extends javax.swing.JFrame {
     Metodo para criar lista de todas as cidades de um determinado estado
      */
     public void populaCidade() {
+        cbCidadeAlterar.removeAllItems();
         String uf = String.valueOf(cbEstadoAlterar.getSelectedItem()); //Estado para listar cidades
         CidadeServico cidadeServico = new CidadeServico(); // Objeto para realizar buscas no banco
         List<Cidade> cidades = cidadeServico.listaCidade(uf); // Criação da lista com as cidades do estado escolhido 
@@ -579,6 +690,102 @@ public class PrincipalDoador extends javax.swing.JFrame {
         for (Cidade cidade : cidades) {
             cbCidadeAlterar.addItem(cidade.getNomeCidade());
         }
+    }
+
+    public void atualizarDados() {
+        Doador doadorAtualizado = new Doador(usuario.getIdUsuario(),
+                jtfAlterarNome.getText(),
+                jtfAlterarCpfCnpj.getText(),
+                jtfAlterarTelefone.getText(),
+                jtfAlterarEmail.getText(),
+                null);
+
+        DoadorServico doadorServico = new DoadorServico();
+        Doador doadorValida = doadorServico.atualizaDoador(doadorAtualizado);
+        if (doadorValida == null) {
+            JOptionPane.showMessageDialog(this, "Erro ao atualizar dados pessoais", "Erro", JOptionPane.ERROR_MESSAGE);
+        } else {
+            usuario.setDoadorLogado(doadorValida);
+            doadorLogado = doadorValida;
+
+            JOptionPane.showMessageDialog(this, "Dados atualizados com sucesso", "Atualizado", JOptionPane.INFORMATION_MESSAGE);
+            painelDoador.setSelectedIndex(0);
+
+        }
+
+    }
+
+    public void atualizarEndereco() {
+        String uf = String.valueOf(cbEstadoAlterar.getSelectedItem());
+        String cidade = String.valueOf(cbCidadeAlterar.getSelectedItem());
+        int numero = Integer.parseInt(jtfAlterarNumero.getText());
+        Endereco enderecoAtualizado = new Endereco(uf, cidade,
+                jtfAlterarCep.getText(),
+                jtfAlterarRua.getText(),
+                jtfAlterarBairro.getText(),
+                numero,
+                jtfAlterarComplemento.getText());
+
+        EnderecoServico enderecoServico = new EnderecoServico();
+        Endereco enderecoValida = enderecoServico.atualizaEnderecoDoador(enderecoAtualizado, usuario.getIdUsuario());
+        if (enderecoValida == null) {
+            JOptionPane.showMessageDialog(this, "Erro ao atualizar endereço do Doador", "Erro", JOptionPane.ERROR_MESSAGE);
+        } else {
+            usuario.setEnderecoUsuarioLogado(enderecoValida);
+            enderecoUsuarioLogado = enderecoValida;
+
+            JOptionPane.showMessageDialog(this, "Endereço atualizado com sucesso", "Atualizado", JOptionPane.INFORMATION_MESSAGE);
+            painelDoador.setSelectedIndex(0);
+        }
+    }
+
+    public boolean validarDadosPessoais() {
+        String cpfCnpj = jtfAlterarCpfCnpj.getText();
+        String replaceAll = cpfCnpj.replaceAll("-.", "");
+       //cpfCnpj.replaceAll("-", "");
+        if (jtfAlterarNome.getText().isBlank()) {
+            JOptionPane.showMessageDialog(this, "Preencha todos os campos", "Erro", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+        if (cpfCnpj.length() == 11) {
+            VerificaCpf verificarcpf = new VerificaCpf();
+            verificarcpf.validaCpf(cpfCnpj);
+            if (verificarcpf.isResultado() == false) {
+                JOptionPane.showMessageDialog(this, "CPF invalido", "Erro", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        }
+        if (cpfCnpj.length() != 11 && cpfCnpj.length() != 14) {
+
+            return false;
+        }
+        if (jtfAlterarTelefone.getText().length() != 16) {
+            JOptionPane.showMessageDialog(this, "Digite corretamente o telefone ", "Erro", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (!jtfAlterarEmail.getText().contains("@")) {
+            JOptionPane.showMessageDialog(this, "Digite um E-mail valido", "Erro", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean validarEndereco() {
+        if (jtfAlterarCep.getText().length() != 10) {
+            JOptionPane.showMessageDialog(this, "Digite um CEP valido", "Erro", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        String rua, bairro, numero;
+        rua = jtfAlterarRua.getText();
+        bairro = jtfAlterarBairro.getText();
+        numero = jtfAlterarNumero.getText();
+        if (rua.isBlank() || bairro.isBlank() || numero.isBlank()) {
+            JOptionPane.showMessageDialog(this, "Digite o endereço completo", "Erro", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+        return true;
     }
 
     public void iniciaUsuario() {
@@ -651,11 +858,15 @@ public class PrincipalDoador extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JButton jbAtualizarDados;
+    private javax.swing.JButton jbAtualizarEndereco;
+    private javax.swing.JButton jbSair;
     private javax.swing.JLabel jlBemVindo;
     private javax.swing.JTextField jtfAlterarBairro;
     private javax.swing.JTextField jtfAlterarCep;

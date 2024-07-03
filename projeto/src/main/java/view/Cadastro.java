@@ -442,12 +442,13 @@ public class Cadastro extends javax.swing.JFrame {
         if (rbDoador.isSelected()) {
             if (validarDados() == true) {
                 cadastrarDoador();
-                System.out.println("Cadastrado");
 
             }
         } else if (rbCentroRecebimento.isSelected()) {
-            cadastrarCentroRecebimento();
-            System.out.println("Centro de recebimento");
+            String nomeCentro = jtfNomeCentro.getText();
+            if (validarDados() == true && !nomeCentro.isBlank()) {
+                cadastrarCentroRecebimento();
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Selecione uma Categoria", "Erro", JOptionPane.ERROR_MESSAGE);
         }
@@ -533,6 +534,8 @@ public class Cadastro extends javax.swing.JFrame {
 
         if (doadorServico != null) {
             JOptionPane.showMessageDialog(this, "Cadastro realizado com sucesso", "Cadastro Realizado", JOptionPane.INFORMATION_MESSAGE);
+            Login login = new Login();
+            login.setVisible(true);
             this.dispose();
 
         } else {
@@ -552,25 +555,30 @@ public class Cadastro extends javax.swing.JFrame {
                 jtfSenha.getText());
 
         CentroRecebimentoServico centroServico = new CentroRecebimentoServico();
-        centroServico.salvarCentoRecebimento(centro);
+        if (centroServico.salvarCentoRecebimento(centro) != null) {
 
-        String estado = String.valueOf(cbEstado.getSelectedItem());
-        String cidade = String.valueOf(cbCidade.getSelectedItem());
-        int numero = Integer.parseInt(jtfNumero.getText());
-        Endereco endereco = new Endereco(estado, cidade, jtfCep.getText(),
-                jtfRua.getText(),
-                jtfBairro.getText(),
-                numero,
-                jtfComplemento.getText());
-        EnderecoServico enderecoServico = new EnderecoServico();
-        enderecoServico.slavarEnderecoCentroRecebimento(endereco, centroServico.getIdCadastroCentroRecebimento());
+            String estado = String.valueOf(cbEstado.getSelectedItem());
+            String cidade = String.valueOf(cbCidade.getSelectedItem());
+            int numero = Integer.parseInt(jtfNumero.getText());
+            Endereco endereco = new Endereco(estado, cidade, jtfCep.getText(),
+                    jtfRua.getText(),
+                    jtfBairro.getText(),
+                    numero,
+                    jtfComplemento.getText());
+            EnderecoServico enderecoServico = new EnderecoServico();
+            Endereco end = enderecoServico.slavarEnderecoCentroRecebimento(endereco, centroServico.getIdCadastroCentroRecebimento());
 
-        if (enderecoServico != null) {
-            JOptionPane.showMessageDialog(this, "Cadastro realizado com sucesso", "Cadastro Realizado", JOptionPane.INFORMATION_MESSAGE);
-            this.dispose();
+            if (end != null) {
+                JOptionPane.showMessageDialog(this, "Cadastro realizado com sucesso", "Cadastro Realizado", JOptionPane.INFORMATION_MESSAGE);
+                Login login = new Login();
+                login.setVisible(true);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro ao cadastrar endereço no banco", "Erro", JOptionPane.ERROR_MESSAGE);
+
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Erro ao cadastrar dados no banco", "Erro", JOptionPane.ERROR_MESSAGE);
-
         }
 
     }

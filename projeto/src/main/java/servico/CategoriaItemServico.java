@@ -10,40 +10,39 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import modelo.Cidade;
-import modelo.Estado;
+import modelo.CategoriaItem;
 import util.ConexaoBanco;
 
 /**
  *
  * @author uilso
  */
-public class CidadeServico {
+public class CategoriaItemServico {
     Connection conexao = null;
     PreparedStatement stmt = null;
     ResultSet rs = null;
-
-    public CidadeServico() {
-    }
     
-    public List<Cidade> listaCidade(String uf){
-        String sql = "Select nome,uf FROM municipio where uf = ? ORDER BY nome";
-        List<Cidade> cidades = new ArrayList<>();
+    public List<CategoriaItem> buscaCategoria(){
+        List<CategoriaItem> categorias = new ArrayList<>();
+                
+        String sql = "SELECT *FROM categoria_item";
         
         try {
             conexao = ConexaoBanco.getConnection();
             
             stmt = conexao.prepareStatement(sql);
-            stmt.setString(1, uf);
-            
             rs = stmt.executeQuery();
-            while (rs.next()){
-                String ufCidade = rs.getString("uf");
-                String nome = rs.getString("nome");
-                cidades.add(new Cidade(nome, uf));
+            
+            while(rs.next()){
+                int idCategoria = rs.getInt("id_categoria");
+                String nome = rs.getString("nome_categoria");
+                
+                categorias.add(new CategoriaItem(nome, idCategoria));
+                
             }
         } catch (SQLException e) {
-            System.out.println("Erroa ao selecionar dados "+ e.getMessage());
+            System.out.println("Erro ao buscar categorias no banco "+ e.getMessage());
+            return null;
         } finally {
             try {
                 if (rs != null) {
@@ -57,6 +56,6 @@ public class CidadeServico {
                 System.err.println("Erro ao fechar recursos: " + e.getMessage());
             }
         }
-        return cidades;
+        return categorias;
     }
 }

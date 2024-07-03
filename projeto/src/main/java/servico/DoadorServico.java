@@ -171,6 +171,36 @@ public class DoadorServico {
 
         return doador;
     }
+    public Doador atualizaDoador (Doador doadorAtualizado){
+         String sql = "UPDATE doadores SET nome_doador = ?, cpf_cnpj = ?,telefone_doador = ?, email_doador = ? "
+                + "WHERE id_doador = ? ";
+        try {
+            conexao = ConexaoBanco.getConnection();
+            
+            stmt = conexao.prepareStatement(sql);
+            stmt.setString(1, doadorAtualizado.getNome());
+            stmt.setString(2, doadorAtualizado.getCpf_cnpj());
+            stmt.setString(3, doadorAtualizado.getTelefone());
+            stmt.setString(4, doadorAtualizado.getEmail());
+            stmt.setInt(5, doadorAtualizado.getIdDoador());
+            
+            stmt.executeUpdate();
+            System.out.println("Dados de Doador atualizados com sucesso");
+        } catch (SQLException e) {
+            System.out.println("Erro ao atualizar dados do Doador");
+            return null;
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                ConexaoBanco.fecharConexao(conexao);
+            } catch (SQLException e) {
+                System.err.println("Erro ao fechar recursos: " + e.getMessage());
+            }
+        }
+        return doadorAtualizado;
+    }
 
     public static int getIdCadastroDoador() {
         return idCadastroDoador;

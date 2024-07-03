@@ -66,24 +66,35 @@ public class EnderecoServico {
     }
 
     public Endereco slavarEnderecoCentroRecebimento(Endereco enderecoCentro, int idCentroRecebimento) {
-        String sql = "INSERT INTO ";
+        String sql = "INSERT INTO endereco_centro_recebimento "
+                + "(id_centro_recebimento_endereco,"
+                + "uf_centro_recebimento,"
+                + "cidade_centro_recebimento,"
+                + "cep_centro_recebimento,"
+                + "rua_centro_recebimento,"
+                + "bairro_centro_recebimento,"
+                + "nro_centro_recebimento,"
+                + "complemento_centro_recebimento)"
+                + "VALUES (?,?,?,?,?,?,?,?)";
 
         try {
             conexao = ConexaoBanco.getConnection();
 
             stmt = conexao.prepareStatement(sql);
-            stmt.setString(1, enderecoCentro.getEstadoEndereco());
-            stmt.setString(2, enderecoCentro.getCidadeEndereco());
-            stmt.setString(3, enderecoCentro.getCep());
-            stmt.setString(4, enderecoCentro.getRua());
-            stmt.setString(5, enderecoCentro.getBairro());
-            stmt.setInt(6, enderecoCentro.getNumero());
-            stmt.setString(7, enderecoCentro.getComplemento());
+            stmt.setInt(1, CentroRecebimentoServico.getIdCadastroCentroRecebimento());
+            stmt.setString(2, enderecoCentro.getEstadoEndereco());
+            stmt.setString(3, enderecoCentro.getCidadeEndereco());
+            stmt.setString(4, enderecoCentro.getCep());
+            stmt.setString(5, enderecoCentro.getRua());
+            stmt.setString(6, enderecoCentro.getBairro());
+            stmt.setInt(7, enderecoCentro.getNumero());
+            stmt.setString(8, enderecoCentro.getComplemento());
 
             stmt.executeUpdate();
             System.out.println("Endereço salvo com sucesso no banco");
         } catch (SQLException e) {
             System.out.println("Erro ao salvar endereco no banco " + e.getMessage());
+            return null;
         } finally {
             try {
                 if (stmt != null) {
@@ -148,7 +159,15 @@ public class EnderecoServico {
 
     public Endereco buscaEnderecoCentroRecebimentoPorId(int id_centro_recebimento_endereco) {
         Endereco enderecoBuscado = new Endereco();
-        String sql = "SELECT ";
+        String sql = "SELECT id_endereco_centro_recebimento,"
+                + "cep_centro_recebimento,"
+                + "rua_centro_recebimento,"
+                + "bairro_centro_recebimento,"
+                + "nro_centro_recebimento,"
+                + "complemento_centro_recebimento,"
+                + "cidade_centro_recebimento,"
+                + "uf_centro_recebimento FROM endereco_centro_recebimento "
+                + "WHERE id_centro_recebimento_endereco = ?";
 
         try {
             conexao = ConexaoBanco.getConnection();
@@ -158,15 +177,14 @@ public class EnderecoServico {
             rs = stmt.executeQuery();
 
             if (rs.next()) {
-                int idEndereco = rs.getInt("id_endereco_doador");
-                String rua = rs.getString("rua_doador");
-                String bairro = rs.getString("bairro_doador");
-                int numero = rs.getInt("numero_doador");
-                String complemento = rs.getString("complemento_doador");
-                String cep = rs.getString("cep_doador");
-                String cidade = rs.getString("cidade_doador");
-                String uf = rs.getString("uf_doador");
-                int idDoadorEndereco = rs.getInt("id_doador_endereco");
+                int idEndereco = rs.getInt("id_endereco_centro_recebimento");
+                String rua = rs.getString("rua_centro_recebimento");
+                String bairro = rs.getString("bairro_centro_recebimento");
+                int numero = rs.getInt("nro_centro_recebimento");
+                String complemento = rs.getString("complemento_centro_recebimento");
+                String cep = rs.getString("cep_centro_recebimento");
+                String cidade = rs.getString("cidade_centro_recebimento");
+                String uf = rs.getString("uf_centro_recebimento");
 
                 enderecoBuscado = new Endereco(uf, cidade, cep, rua, bairro, numero, complemento, idEndereco);
             }
@@ -174,24 +192,92 @@ public class EnderecoServico {
             System.out.println("Erro ao buscar endereço");
             JOptionPane.showMessageDialog(null, "Erro ao buscar endereco no banco", "Erro", JOptionPane.ERROR_MESSAGE);
             return null;
-        }
-    
-        finally {
+        } finally {
             try {
-            if (rs != null) {
-                rs.close();
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                ConexaoBanco.fecharConexao(conexao);
+            } catch (SQLException e) {
+                System.err.println("Erro ao fechar recursos: " + e.getMessage());
             }
-            if (stmt != null) {
-                stmt.close();
-            }
-            ConexaoBanco.fecharConexao(conexao);
-        } catch (SQLException e) {
-            System.err.println("Erro ao fechar recursos: " + e.getMessage());
+
         }
-    
-    }
         return enderecoBuscado;
+
+    }
+
+    public Endereco atualizaEnderecoDoador(Endereco novoEndereco, int idDoador) {
+        String sql = "UPDATE endereco_doadores SET rua_doador = ?, bairro_doador = ?, numero_doador= ?,complemento_doador = ?, cep_doador =?,"
+                + "cidade_doador = ?, uf_doador = ? WHERE id_doador_endereco = ?  ";
+        try {
+            conexao = ConexaoBanco.getConnection();
+
+            stmt = conexao.prepareStatement(sql);
+            stmt.setString(1, novoEndereco.getRua());
+            stmt.setString(2, novoEndereco.getBairro());
+            stmt.setInt(3, novoEndereco.getNumero());
+            stmt.setString(4, novoEndereco.getComplemento());
+            stmt.setString(5, novoEndereco.getCep());
+            stmt.setString(6, novoEndereco.getCidadeEndereco());
+            stmt.setString(7, novoEndereco.getEstadoEndereco());
+            stmt.setInt(8, idDoador);
+
+            stmt.executeUpdate();
+            System.out.println("Endereço do Doador atualizado com sucesso");
+        } catch (SQLException e) {
+            System.out.println("Erro ao atualizar endereço do Doador " + e.getMessage());
+            return null;
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                ConexaoBanco.fecharConexao(conexao);
+            } catch (SQLException e) {
+                System.err.println("Erro ao fechar recursos: " + e.getMessage());
+            }
+        }
+
+        return novoEndereco;
+    }
+    public Endereco atualizarEnderecoCentro(Endereco enderecoAtualizado, int id_centro_recebimento){
+    String sql = "UPDATE endereco_centro_recebimento SET rua_centro_recebimento = ?,"
+            + "bairro_centro_recebimento = ?,"
+            + "nro_centro_recebimento = ?,"
+            + "complemento_centro_recebimento = ?,"
+            + "cidade_centro_recebimento = ?,"
+            + "uf_centro_recebimento = ? WHERE id_centro_recebimento_endereco = ?";
+    
+        try {
+            conexao = ConexaoBanco.getConnection();
+            stmt = conexao.prepareStatement(sql);
+            stmt.setString(1, enderecoAtualizado.getRua());
+            stmt.setString(2, enderecoAtualizado.getBairro());
+            stmt.setInt(3, enderecoAtualizado.getNumero());
+            stmt.setString(4, enderecoAtualizado.getComplemento());
+            stmt.setString(5, enderecoAtualizado.getCidadeEndereco());
+            stmt.setString(6, enderecoAtualizado.getEstadoEndereco());
+            stmt.setInt(7, id_centro_recebimento);
+            
+            stmt.executeUpdate();
+            System.out.println("Endereco do Centro de Recebimento atualizado com sucesso");
+        } catch (SQLException e) {
+            System.out.println("Erro ao atualzar Endereco do Centro de Recebimento " + e.getMessage());
+            return null;
+        } finally {
+              try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                ConexaoBanco.fecharConexao(conexao);
+            } catch (SQLException e) {
+                System.err.println("Erro ao fechar recursos: " + e.getMessage());
+            }
+        }
+        return enderecoAtualizado;
 }
 }
-
-
