@@ -1,0 +1,154 @@
+
+CREATE TABLE IF NOT EXISTS public.categoria_item
+(
+    id_categoria serial NOT NULL,
+    nome_categoria character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT categoria_item_pkey PRIMARY KEY (id_categoria)
+);
+
+CREATE TABLE IF NOT EXISTS public.centro_recebimento
+(
+    id_centro_recebimento serial NOT NULL,
+    nome_completo_centro_recebimento character varying(256) COLLATE pg_catalog."default" NOT NULL,
+    cpf_cnpj character varying(18) COLLATE pg_catalog."default" NOT NULL,
+    telefone_centro_recebimento character varying(16) COLLATE pg_catalog."default" NOT NULL,
+    nome_centro_recebimento character varying(256) COLLATE pg_catalog."default" NOT NULL,
+    senha_centro_recebimento character varying(256) COLLATE pg_catalog."default" NOT NULL,
+    email_centro_recebimento character varying COLLATE pg_catalog."default",
+    CONSTRAINT centro_recebimento_pkey PRIMARY KEY (id_centro_recebimento)
+);
+
+CREATE TABLE IF NOT EXISTS public.doacao
+(
+    id_doacao serial NOT NULL,
+    id_doador_doacao integer NOT NULL,
+    id_centro_recebimento_destino_doacao integer NOT NULL,
+    id_requisicao_doacao integer NOT NULL,
+    id_item_doado_doacao integer NOT NULL,
+    quantidade_doada integer NOT NULL,
+    CONSTRAINT doacao_pkey PRIMARY KEY (id_doacao)
+);
+
+CREATE TABLE IF NOT EXISTS public.doadores
+(
+    id_doador serial NOT NULL,
+    nome_doador character varying(256) COLLATE pg_catalog."default" NOT NULL,
+    cpf_cnpj character varying(18) COLLATE pg_catalog."default" NOT NULL,
+    telefone_doador character varying(16) COLLATE pg_catalog."default",
+    email_doador character varying(256) COLLATE pg_catalog."default",
+    senha_doador character varying(256) COLLATE pg_catalog."default",
+    CONSTRAINT doadores_pkey PRIMARY KEY (id_doador)
+);
+
+CREATE TABLE IF NOT EXISTS public.endereco_centro_recebimento
+(
+    id_endereco_centro_recebimento serial NOT NULL,
+    id_centro_recebimento_endereco integer NOT NULL,
+    cep_centro_recebimento character varying(256) COLLATE pg_catalog."default" NOT NULL,
+    rua_centro_recebimento character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    bairro_centro_recebimento character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    nro_centro_recebimento integer NOT NULL,
+    complemento_centro_recebimento character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    cidade_centro_recebimento character varying(256) COLLATE pg_catalog."default" NOT NULL,
+    uf_centro_recebimento character varying(256) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT endereco_centro_recebimento_pkey PRIMARY KEY (id_endereco_centro_recebimento)
+);
+
+CREATE TABLE IF NOT EXISTS public.endereco_doadores
+(
+    id_endereco_doador serial NOT NULL,
+    id_doador_endereco integer NOT NULL,
+    rua_doador character varying(256) COLLATE pg_catalog."default" NOT NULL,
+    bairro_doador character varying(256) COLLATE pg_catalog."default" NOT NULL,
+    numero_doador character varying(256) COLLATE pg_catalog."default" NOT NULL,
+    complemento_doador character varying(256) COLLATE pg_catalog."default",
+    cep_doador character varying(256) COLLATE pg_catalog."default" NOT NULL,
+    cidade_doador character varying(256) COLLATE pg_catalog."default",
+    uf_doador character varying(254) COLLATE pg_catalog."default",
+    CONSTRAINT endereco_doadores_pkey PRIMARY KEY (id_endereco_doador)
+);
+
+
+
+CREATE TABLE IF NOT EXISTS public.itens
+(
+    id_item serial NOT NULL,
+    id_categoria_item integer NOT NULL,
+    nome_item character varying(50) COLLATE pg_catalog."default",
+    CONSTRAINT itens_pkey PRIMARY KEY (id_item)
+);
+
+
+CREATE TABLE IF NOT EXISTS public.requisicao
+(
+    id_requisicao serial NOT NULL,
+    id_centro_recebimento_requisicao integer NOT NULL,
+    id_item_requisicao integer NOT NULL,
+    quantidade_item integer NOT NULL,
+    status_requisicao status_enum,
+    CONSTRAINT requisicao_pkey PRIMARY KEY (id_requisicao)
+);
+
+ALTER TABLE IF EXISTS public.doacao
+    ADD CONSTRAINT doacao_id_centro_recebimento_destino_doacao_fkey FOREIGN KEY (id_centro_recebimento_destino_doacao)
+    REFERENCES public.centro_recebimento (id_centro_recebimento) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;
+
+
+ALTER TABLE IF EXISTS public.doacao
+    ADD CONSTRAINT doacao_id_doador_doacao_fkey FOREIGN KEY (id_doador_doacao)
+    REFERENCES public.doadores (id_doador) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;
+
+
+ALTER TABLE IF EXISTS public.doacao
+    ADD CONSTRAINT doacao_id_item_doado_doacao_fkey FOREIGN KEY (id_item_doado_doacao)
+    REFERENCES public.itens (id_item) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;
+
+
+ALTER TABLE IF EXISTS public.doacao
+    ADD CONSTRAINT doacao_id_requisicao_doacao_fkey FOREIGN KEY (id_requisicao_doacao)
+    REFERENCES public.requisicao (id_requisicao) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;
+
+
+ALTER TABLE IF EXISTS public.endereco_centro_recebimento
+    ADD CONSTRAINT endereco_centro_recebimento_id_centro_recebimento_endereco_fkey FOREIGN KEY (id_centro_recebimento_endereco)
+    REFERENCES public.centro_recebimento (id_centro_recebimento) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;
+
+
+ALTER TABLE IF EXISTS public.endereco_doadores
+    ADD CONSTRAINT endereco_doadores_id_doador_endereco_fkey FOREIGN KEY (id_doador_endereco)
+    REFERENCES public.doadores (id_doador) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;
+
+
+ALTER TABLE IF EXISTS public.itens
+    ADD CONSTRAINT itens_id_categoria_item_fkey FOREIGN KEY (id_categoria_item)
+    REFERENCES public.categoria_item (id_categoria) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;
+
+
+ALTER TABLE IF EXISTS public.requisicao
+    ADD CONSTRAINT requisicao_id_centro_recebimento_requisicao_fkey FOREIGN KEY (id_centro_recebimento_requisicao)
+    REFERENCES public.centro_recebimento (id_centro_recebimento) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;
+
+
+ALTER TABLE IF EXISTS public.requisicao
+    ADD CONSTRAINT requisicao_id_item_requisicao_fkey FOREIGN KEY (id_item_requisicao)
+    REFERENCES public.itens (id_item) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;
+
+END;
