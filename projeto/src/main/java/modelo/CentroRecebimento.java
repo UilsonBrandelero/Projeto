@@ -22,6 +22,14 @@ public class CentroRecebimento {
     public CentroRecebimento() {
     }
 
+    public CentroRecebimento(String nomeCentroRecebimento, int idCentroRebebimento) {
+        this.nomeCentroRecebimento = nomeCentroRecebimento;
+        this.idCentroRebebimento = idCentroRebebimento;
+    }
+
+    
+    
+
     public CentroRecebimento(CentroRecebimento centroRecebimento) {
         this.nome = centroRecebimento.getNome();
         this.cpf_cnpj = centroRecebimento.getCpf_cnpj();
@@ -104,6 +112,11 @@ public class CentroRecebimento {
 
     public void setIdCentroRebebimento(int idCentroRebebimento) {
         this.idCentroRebebimento = idCentroRebebimento;
+    }
+
+    @Override
+    public String toString() {
+        return nomeCentroRecebimento;
     }
 
 }

@@ -32,6 +32,13 @@ public class CategoriaItem {
     public void setIdCategoria(int idCategoria) {
         this.idCategoria = idCategoria;
     }
+
+    @Override
+    public String toString() {
+        return  this.nomeCategoria;
+    }
+
+  
    
    
    

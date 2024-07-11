@@ -45,6 +45,11 @@ public class Item {
     public void setIdCategoriaItem(int idCategoriaItem) {
         this.idCategoriaItem = idCategoriaItem;
     }
+
+    @Override
+    public String toString() {
+        return nomeItem;
+    }
     
     
     

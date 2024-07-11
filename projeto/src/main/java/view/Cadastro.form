@@ -9,6 +9,8 @@
         <Property name="text" type="java.lang.String" value="jLabel3"/>
       </Properties>
     </Component>
+    <Component class="javax.swing.ButtonGroup" name="botoesCpfCnpj">
+    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
@@ -34,7 +36,7 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace pref="12" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="painelDadosPessoasi" min="-2" max="-2" attributes="0"/>
@@ -91,16 +93,18 @@
                       </Group>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="jlNome" max="32767" attributes="0"/>
+                              <Component id="jtfNomeCentro" alignment="0" min="-2" pref="333" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="jfTelefone" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jlConfirmarSenha" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="jlConfirmarSenha" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Component id="jlSenha" alignment="0" min="-2" pref="74" max="-2" attributes="0"/>
                                       <Component id="jlEmail" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jlCpf" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jlNome" min="-2" pref="109" max="-2" attributes="0"/>
+                                      <Component id="rbCpf" min="-2" pref="98" max="-2" attributes="0"/>
+                                      <Component id="rbCnpj" min="-2" pref="98" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
                                           <Component id="jtfEmail" alignment="0" pref="446" max="32767" attributes="0"/>
@@ -112,7 +116,6 @@
                                       <Component id="jtfConfirmarSenha" min="-2" pref="286" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <Component id="jtfNomeCentro" alignment="0" min="-2" pref="333" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="0" pref="23" max="32767" attributes="0"/>
                       </Group>
@@ -128,10 +131,17 @@
                       <Component id="jlNome" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jtfNome" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jlCpf" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jtfCpf" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                          <Component id="jtfCpf" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="rbCpf" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                          <Component id="rbCnpj" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -171,14 +181,6 @@
             <Property name="text" type="java.lang.String" value="Nome Completo"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jlCpf">
-          <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Arial" size="14" style="0"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="CPF/CNPJ"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JLabel" name="jfTelefone">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -213,10 +215,16 @@
         </Component>
         <Component class="javax.swing.JFormattedTextField" name="jtfCpf">
           <Properties>
+            <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
+              <Format subtype="0" type="0"/>
+            </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Arial" size="14" style="0"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jtfCpfKeyReleased"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JFormattedTextField" name="jtfTelefone">
           <Properties>
@@ -270,6 +278,24 @@
               <Font name="Arial" size="14" style="0"/>
             </Property>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="rbCpf">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="CPF"/>
+          </Properties>
+          <Events>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="rbCpfItemStateChanged"/>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="rbCpfStateChanged"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="rbCnpj">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="CNPJ"/>
+          </Properties>
+          <Events>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="rbCnpjItemStateChanged"/>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="rbCnpjStateChanged"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

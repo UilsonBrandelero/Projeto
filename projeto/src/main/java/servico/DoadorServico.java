@@ -4,14 +4,12 @@
  */
 package servico;
 
-import java.beans.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import modelo.Doador;
+import modelo.Endereco;
 import util.ConexaoBanco;
 import util.UsuarioLogado;
 
@@ -24,11 +22,12 @@ public class DoadorServico {
 
     Connection conexao = null;
     PreparedStatement stmt = null;
+    // PreparedStatement stmt2 = null;
     ResultSet rs = null;
 
     String nomeDoador = "";
     String senhaDoador = "";
-    int idDoador;
+    
     private static int idCadastroDoador;
 
     public DoadorServico() {
@@ -38,11 +37,13 @@ public class DoadorServico {
     //Metodo utilizado para adicionar dados de um novo usuario cadastrado como doador no banco
     public Doador salvarNovoDoador(Doador doador) {
         String sql = "INSERT INTO doadores (nome_doador, cpf_cnpj,telefone_doador, email_doador, senha_doador)"
-                + "VALUES(?,?,?,?,?)";
+                + "VALUES(?,?,?,?,?);"
+                + "";
         try {
             conexao = ConexaoBanco.getConnection();
 
             stmt = conexao.prepareStatement(sql, stmt.RETURN_GENERATED_KEYS);
+
             stmt.setString(1, doador.getNome());
             stmt.setString(2, doador.getCpf_cnpj());
             stmt.setString(3, doador.getTelefone());
@@ -56,6 +57,7 @@ public class DoadorServico {
             rs = stmt.getGeneratedKeys();
             if (rs.next()) {
                 idCadastroDoador = rs.getInt("id_doador");
+                doador.setIdDoador(rs.getInt("id_doador"));
             }
 
         } catch (SQLException e) {
@@ -77,6 +79,7 @@ public class DoadorServico {
     //Metodo utilizado para validar informacçõs de login.
     //Os argumentos do metodo são as entradas do usuario na tela de login 
     public boolean consultaDoadorLogin(String nome, String senha) {
+        int idDoador = 0;
 
         String sql = "SELECT nome_doador, senha_doador, id_doador FROM doadores WHERE nome_doador = ? ";
 
@@ -171,19 +174,20 @@ public class DoadorServico {
 
         return doador;
     }
-    public Doador atualizaDoador (Doador doadorAtualizado){
-         String sql = "UPDATE doadores SET nome_doador = ?, cpf_cnpj = ?,telefone_doador = ?, email_doador = ? "
+
+    public Doador atualizaDoador(Doador doadorAtualizado) {
+        String sql = "UPDATE doadores SET nome_doador = ?, cpf_cnpj = ?,telefone_doador = ?, email_doador = ? "
                 + "WHERE id_doador = ? ";
         try {
             conexao = ConexaoBanco.getConnection();
-            
+
             stmt = conexao.prepareStatement(sql);
             stmt.setString(1, doadorAtualizado.getNome());
             stmt.setString(2, doadorAtualizado.getCpf_cnpj());
             stmt.setString(3, doadorAtualizado.getTelefone());
             stmt.setString(4, doadorAtualizado.getEmail());
             stmt.setInt(5, doadorAtualizado.getIdDoador());
-            
+
             stmt.executeUpdate();
             System.out.println("Dados de Doador atualizados com sucesso");
         } catch (SQLException e) {
@@ -200,6 +204,40 @@ public class DoadorServico {
             }
         }
         return doadorAtualizado;
+    }
+
+    public boolean apagarDoadorPorId(int id_doador) {
+        String sql = "DELETE FROM endereco_doadores WHERE id_doador_endereco = ?";
+        String sql2 ="DELETE FROM doadores WHERE id_doador = ?;";
+        try {
+            conexao = ConexaoBanco.getConnection();
+
+            stmt = conexao.prepareStatement(sql);
+            stmt.setInt(1, id_doador);
+            
+            stmt.executeUpdate();
+            
+            stmt = conexao.prepareStatement(sql2);
+            stmt.setInt(1, id_doador);
+            
+            stmt.executeUpdate();
+            
+            System.out.println("Doador apagado com Sucesso");
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao apagar doador no id = " + id_doador + e.getMessage());
+            return false;
+        } finally {
+             try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                ConexaoBanco.fecharConexao(conexao);
+            } catch (SQLException e) {
+                System.err.println("Erro ao fechar recursos: " + e.getMessage());
+            }
+        }
+        return true;
     }
 
     public static int getIdCadastroDoador() {

@@ -4,8 +4,16 @@
  */
 package view;
 
+import java.text.ParseException;
+import java.util.Formatter;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 import modelo.CentroRecebimento;
 import modelo.Cidade;
@@ -25,7 +33,7 @@ import util.VerificaCpf;
  */
 public class Cadastro extends javax.swing.JFrame {
 
-    MaskFormatter mascara = new MaskFormatter();
+    JFormattedTextField jtfCnpj;
 
     public Cadastro() {
         initComponents();
@@ -33,6 +41,7 @@ public class Cadastro extends javax.swing.JFrame {
         jtfNomeCentro.setVisible(false);
         jlNomeCentro.setVisible(false);
         popularEstados();
+        rbCpf.setSelected(true);
 
     }
 
@@ -47,9 +56,9 @@ public class Cadastro extends javax.swing.JFrame {
 
         botoesDoadorCentro = new javax.swing.ButtonGroup();
         jLabel3 = new javax.swing.JLabel();
+        botoesCpfCnpj = new javax.swing.ButtonGroup();
         painelDadosPessoasi = new javax.swing.JPanel();
         jlNome = new javax.swing.JLabel();
-        jlCpf = new javax.swing.JLabel();
         jfTelefone = new javax.swing.JLabel();
         jlEmail = new javax.swing.JLabel();
         jlSenha = new javax.swing.JLabel();
@@ -62,6 +71,8 @@ public class Cadastro extends javax.swing.JFrame {
         jtfNome = new javax.swing.JFormattedTextField();
         jlNomeCentro = new javax.swing.JLabel();
         jtfNomeCentro = new javax.swing.JTextField();
+        rbCpf = new javax.swing.JRadioButton();
+        rbCnpj = new javax.swing.JRadioButton();
         jLabel1 = new javax.swing.JLabel();
         painelCabecalho = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -92,9 +103,6 @@ public class Cadastro extends javax.swing.JFrame {
         jlNome.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jlNome.setText("Nome Completo");
 
-        jlCpf.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jlCpf.setText("CPF/CNPJ");
-
         jfTelefone.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jfTelefone.setText("Telefone");
 
@@ -107,7 +115,13 @@ public class Cadastro extends javax.swing.JFrame {
         jlConfirmarSenha.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jlConfirmarSenha.setText("Confirmar senha");
 
+        jtfCpf.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter()));
         jtfCpf.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jtfCpf.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfCpfKeyReleased(evt);
+            }
+        });
 
         try {
             jtfTelefone.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(##) # ####-####")));
@@ -129,6 +143,30 @@ public class Cadastro extends javax.swing.JFrame {
 
         jtfNomeCentro.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
+        rbCpf.setText("CPF");
+        rbCpf.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                rbCpfItemStateChanged(evt);
+            }
+        });
+        rbCpf.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                rbCpfStateChanged(evt);
+            }
+        });
+
+        rbCnpj.setText("CNPJ");
+        rbCnpj.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                rbCnpjItemStateChanged(evt);
+            }
+        });
+        rbCnpj.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                rbCnpjStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout painelDadosPessoasiLayout = new javax.swing.GroupLayout(painelDadosPessoasi);
         painelDadosPessoasi.setLayout(painelDadosPessoasiLayout);
         painelDadosPessoasiLayout.setHorizontalGroup(
@@ -141,25 +179,25 @@ public class Cadastro extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(painelDadosPessoasiLayout.createSequentialGroup()
                         .addGroup(painelDadosPessoasiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jtfNomeCentro, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(painelDadosPessoasiLayout.createSequentialGroup()
-                                .addGroup(painelDadosPessoasiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jlNome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(painelDadosPessoasiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jfTelefone)
-                                    .addComponent(jlConfirmarSenha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jlConfirmarSenha)
                                     .addComponent(jlSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jlEmail)
-                                    .addComponent(jlCpf))
-                                .addGap(12, 12, 12)
+                                    .addComponent(jlNome, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(rbCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(rbCnpj, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
                                 .addGroup(painelDadosPessoasiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(painelDadosPessoasiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                         .addComponent(jtfEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
                                         .addComponent(jtfNome, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, painelDadosPessoasiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(jtfTelefone, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jtfCpf, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)))
+                                        .addComponent(jtfTelefone, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jtfCpf, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE))
                                     .addComponent(jtfSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jtfConfirmarSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jtfNomeCentro, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jtfConfirmarSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(0, 23, Short.MAX_VALUE))))
         );
         painelDadosPessoasiLayout.setVerticalGroup(
@@ -169,10 +207,15 @@ public class Cadastro extends javax.swing.JFrame {
                 .addGroup(painelDadosPessoasiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jlNome)
                     .addComponent(jtfNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12)
-                .addGroup(painelDadosPessoasiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jlCpf)
-                    .addComponent(jtfCpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(painelDadosPessoasiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(painelDadosPessoasiLayout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(jtfCpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(painelDadosPessoasiLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(rbCpf)
+                        .addGap(1, 1, 1)
+                        .addComponent(rbCnpj)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(painelDadosPessoasiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jfTelefone)
@@ -388,7 +431,7 @@ public class Cadastro extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(12, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(painelDadosPessoasi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -423,6 +466,7 @@ public class Cadastro extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void rbCentroRecebimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbCentroRecebimentoActionPerformed
         jtfNomeCentro.setVisible(true);
         jlNomeCentro.setVisible(true);
@@ -437,16 +481,16 @@ public class Cadastro extends javax.swing.JFrame {
     }//GEN-LAST:event_rbDoadorActionPerformed
 
     private void botaoCadastarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCadastarActionPerformed
-        //validarDados();
+        boolean v = validarDados();
 
         if (rbDoador.isSelected()) {
-            if (validarDados() == true) {
+            if (v == true) {
                 cadastrarDoador();
 
             }
         } else if (rbCentroRecebimento.isSelected()) {
             String nomeCentro = jtfNomeCentro.getText();
-            if (validarDados() == true && !nomeCentro.isBlank()) {
+            if (v == true && !nomeCentro.isBlank()) {
                 cadastrarCentroRecebimento();
             }
         } else {
@@ -460,6 +504,54 @@ public class Cadastro extends javax.swing.JFrame {
         cbCidade.removeAllItems();
         popularCidades();
     }//GEN-LAST:event_cbEstadoItemStateChanged
+
+    private void rbCnpjItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rbCnpjItemStateChanged
+      jtfCpf.setText("");
+        if(rbCnpj.isSelected()){
+          habilitaCnpj();
+      }
+
+    }//GEN-LAST:event_rbCnpjItemStateChanged
+
+    private void rbCpfItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rbCpfItemStateChanged
+           jtfCpf.setText("");
+        if(rbCpf.isSelected()){
+         habilitaCpf();
+    }
+
+    }//GEN-LAST:event_rbCpfItemStateChanged
+
+    private void rbCpfStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_rbCpfStateChanged
+    
+    }//GEN-LAST:event_rbCpfStateChanged
+
+    private void rbCnpjStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_rbCnpjStateChanged
+    
+    }//GEN-LAST:event_rbCnpjStateChanged
+
+    private void jtfCpfKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfCpfKeyReleased
+      
+    }//GEN-LAST:event_jtfCpfKeyReleased
+    public void habilitaCpf(){
+        try {
+            jtfCpf.setFormatterFactory(null);
+            jtfCpf.setText(null);
+            jtfCpf.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("###.###.###-##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+    }
+    public void habilitaCnpj() {
+        try {
+            
+            jtfCpf.setFormatterFactory(null);
+            jtfCpf.setText(null);
+            jtfCpf.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("##.###.###/####-##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
+    }
 
     public boolean validarDados() {
         if (jtfNome.getText().isEmpty()) {
@@ -508,6 +600,8 @@ public class Cadastro extends javax.swing.JFrame {
     public void juntaBotoes() {
         botoesDoadorCentro.add(rbDoador);
         botoesDoadorCentro.add(rbCentroRecebimento);
+        botoesCpfCnpj.add(rbCpf);
+        botoesCpfCnpj.add(rbCnpj);
 
     }
 
@@ -519,30 +613,36 @@ public class Cadastro extends javax.swing.JFrame {
                 jtfSenha.getText());
 
         DoadorServico doadorServico = new DoadorServico();
-        doadorServico.salvarNovoDoador(doador);
+        Doador doadorValidacao = doadorServico.salvarNovoDoador(doador);
 
-        String estado = String.valueOf(cbEstado.getSelectedItem());
-        String cidade = String.valueOf(cbCidade.getSelectedItem());
-        int numero = Integer.parseInt(jtfNumero.getText());
-        Endereco endereco = new Endereco(estado, cidade, jtfCep.getText(),
-                jtfRua.getText(),
-                jtfBairro.getText(),
-                numero,
-                jtfComplemento.getText());
-        EnderecoServico enderecoServico = new EnderecoServico();
-        enderecoServico.salvarEnderecoDoador(endereco, DoadorServico.getIdCadastroDoador());
+        if (doadorValidacao != null) {
+            System.out.println("Id doador " + doadorValidacao.getIdDoador());
+            String estado = String.valueOf(cbEstado.getSelectedItem());
+            String cidade = String.valueOf(cbCidade.getSelectedItem());
+            int numero = Integer.parseInt(jtfNumero.getText());
+            Endereco endereco = new Endereco(estado, cidade, jtfCep.getText(),
+                    jtfRua.getText(),
+                    jtfBairro.getText(),
+                    numero,
+                    jtfComplemento.getText());
+            EnderecoServico enderecoServico = new EnderecoServico();
+            Endereco endValidacao = enderecoServico.salvarEnderecoDoador(endereco, DoadorServico.getIdCadastroDoador());
+            if (endValidacao != null) {
+                JOptionPane.showMessageDialog(this, "Cadastro realizado com sucesso", "Cadastro Realizado", JOptionPane.INFORMATION_MESSAGE);
+                BoasVindas boasVindas = new BoasVindas();
+                boasVindas.setVisible(true);
+                this.dispose();
 
-        if (doadorServico != null) {
-            JOptionPane.showMessageDialog(this, "Cadastro realizado com sucesso", "Cadastro Realizado", JOptionPane.INFORMATION_MESSAGE);
-            Login login = new Login();
-            login.setVisible(true);
-            this.dispose();
+            } else {
+                boolean v = doadorServico.apagarDoadorPorId(doadorValidacao.getIdDoador());
+                if (v == true) {
+                    JOptionPane.showMessageDialog(this, "Erro ao cadastrar dados no banco", "Erro", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Erro ao apagar Doador. Erro ao cadastrar dados no banco", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
 
-        } else {
-            JOptionPane.showMessageDialog(this, "Erro ao cadastrar dados no banco", "Erro", JOptionPane.ERROR_MESSAGE);
-
+            }
         }
-
     }
 
     public void cadastrarCentroRecebimento() {
@@ -555,7 +655,8 @@ public class Cadastro extends javax.swing.JFrame {
                 jtfSenha.getText());
 
         CentroRecebimentoServico centroServico = new CentroRecebimentoServico();
-        if (centroServico.salvarCentoRecebimento(centro) != null) {
+        CentroRecebimento centroValidacao = centroServico.salvarCentoRecebimento(centro);
+        if (centroValidacao != null) {
 
             String estado = String.valueOf(cbEstado.getSelectedItem());
             String cidade = String.valueOf(cbCidade.getSelectedItem());
@@ -570,15 +671,20 @@ public class Cadastro extends javax.swing.JFrame {
 
             if (end != null) {
                 JOptionPane.showMessageDialog(this, "Cadastro realizado com sucesso", "Cadastro Realizado", JOptionPane.INFORMATION_MESSAGE);
-                Login login = new Login();
-                login.setVisible(true);
+                BoasVindas boasVindas = new BoasVindas();
+                boasVindas.setVisible(true);
                 this.dispose();
             } else {
-                JOptionPane.showMessageDialog(this, "Erro ao cadastrar endereço no banco", "Erro", JOptionPane.ERROR_MESSAGE);
+                boolean v = centroServico.apagarCentroPorId(centroValidacao.getIdCentroRebebimento());
+                if (v == true) {
+                    System.out.println("id centro = " + centroValidacao.getIdCentroRebebimento());
+                    JOptionPane.showMessageDialog(this, "Erro ao cadastrar endereço no banco", "Erro", JOptionPane.ERROR_MESSAGE);
 
+                } else {
+                    JOptionPane.showMessageDialog(this, "Erro ao Apagar Centro. Erro ao cadastrar endereço no banco", "Erro", JOptionPane.ERROR_MESSAGE);
+
+                }
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "Erro ao cadastrar dados no banco", "Erro", JOptionPane.ERROR_MESSAGE);
         }
 
     }
@@ -604,6 +710,7 @@ public class Cadastro extends javax.swing.JFrame {
     // private JLabel jlNomeCentroRecebimento;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botaoCadastar;
+    private javax.swing.ButtonGroup botoesCpfCnpj;
     private javax.swing.ButtonGroup botoesDoadorCentro;
     private javax.swing.JComboBox<String> cbCidade;
     private javax.swing.JComboBox<String> cbEstado;
@@ -618,7 +725,6 @@ public class Cadastro extends javax.swing.JFrame {
     private javax.swing.JLabel jlCep;
     private javax.swing.JLabel jlComplemento;
     private javax.swing.JLabel jlConfirmarSenha;
-    private javax.swing.JLabel jlCpf;
     private javax.swing.JLabel jlEmail;
     private javax.swing.JLabel jlNome;
     private javax.swing.JLabel jlNomeCentro;
@@ -641,6 +747,8 @@ public class Cadastro extends javax.swing.JFrame {
     private javax.swing.JPanel painelDadosPessoasi;
     private javax.swing.JPanel painelEndereco;
     private javax.swing.JRadioButton rbCentroRecebimento;
+    private javax.swing.JRadioButton rbCnpj;
+    private javax.swing.JRadioButton rbCpf;
     private javax.swing.JRadioButton rbDoador;
     // End of variables declaration//GEN-END:variables
 }

@@ -4,16 +4,31 @@
  */
 package view;
 
+import java.awt.event.ItemEvent;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import modelo.CategoriaItem;
+import modelo.CentroRecebimento;
 import modelo.Cidade;
+import modelo.Doacao;
 import modelo.Doador;
 import modelo.Endereco;
 import modelo.Estado;
+import modelo.Requisicao;
+import servico.CategoriaItemServico;
+import servico.CentroRecebimentoServico;
 import servico.CidadeServico;
 import servico.DoadorServico;
 import servico.EnderecoServico;
 import servico.EstadoServico;
+import servico.RequisicaoServico;
+import util.ExecutaDoacao;
+import util.StatusRequisicao;
 import util.UsuarioLogado;
 import util.VerificaCpf;
 
@@ -21,13 +36,21 @@ import util.VerificaCpf;
  *
  * @author uilso
  */
+
 public class PrincipalDoador extends javax.swing.JFrame {
+
+    DefaultTableModel modeloTabeloRequisicao;
+    DefaultTableModel modeloTabelaDoacao;
+    ListSelectionModel selectionModel;
 
     public PrincipalDoador() {
         initComponents();
-        jlBemVindo.setText("Bem Vindo " + doadorLogado.getNome());
-        iniciaUsuario();
 
+        jlBemVindo.setText("Bem Vindo " + doadorLogado.getNome());
+        this.modeloTabelaDoacao = (DefaultTableModel) tabelaDoacao.getModel();
+        this.modeloTabeloRequisicao = (DefaultTableModel) tabelaRequisicao.getModel();
+        this.selectionModel = tabelaRequisicao.getSelectionModel();
+        evento();
     }
     UsuarioLogado usuario = new UsuarioLogado();
     Doador doadorLogado = new Doador(usuario.getDoadorLogado());
@@ -49,17 +72,26 @@ public class PrincipalDoador extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jComboBox3 = new javax.swing.JComboBox<>();
+        cbEstadoDoacao = new javax.swing.JComboBox<>();
+        cbCidadeDoacao = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
-        jComboBox4 = new javax.swing.JComboBox<>();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        cbCategoriaDoacao = new javax.swing.JComboBox<>();
+        cbCentroDoacao = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         botaoSalvarDoacao = new javax.swing.JButton();
-        jLabel7 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tabelaDoacao = new javax.swing.JTable();
+        jPanel9 = new javax.swing.JPanel();
+        jlItem = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jsQuantidade = new javax.swing.JSpinner();
+        jbAdicionar = new javax.swing.JButton();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tabelaRequisicao = new javax.swing.JTable();
+        jlQuantidade = new javax.swing.JLabel();
+        jbEditar = new javax.swing.JButton();
+        jbDeletar = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel7 = new javax.swing.JPanel();
@@ -107,11 +139,11 @@ public class PrincipalDoador extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 899, Short.MAX_VALUE)
+            .addGap(0, 1238, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 634, Short.MAX_VALUE)
+            .addGap(0, 683, Short.MAX_VALUE)
         );
 
         painelDoador.addTab("Home", jPanel1);
@@ -127,17 +159,44 @@ public class PrincipalDoador extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel4.setText("Centro de Recebimento");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbEstadoDoacao.setToolTipText("");
+        cbEstadoDoacao.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbEstadoDoacaoItemStateChanged(evt);
+            }
+        });
+        cbEstadoDoacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbEstadoDoacaoActionPerformed(evt);
+            }
+        });
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbCidadeDoacao.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbCidadeDoacaoItemStateChanged(evt);
+            }
+        });
+        cbCidadeDoacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbCidadeDoacaoActionPerformed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel5.setText("Categoria de Itens");
 
-        jComboBox4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbCategoriaDoacao.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        cbCategoriaDoacao.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbCategoriaDoacaoItemStateChanged(evt);
+            }
+        });
+
+        cbCentroDoacao.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbCentroDoacaoItemStateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -147,22 +206,22 @@ public class PrincipalDoador extends javax.swing.JFrame {
                 .addGap(15, 15, 15)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbCategoriaDoacao, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE))
                         .addGap(109, 109, 109)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jComboBox2, 0, 163, Short.MAX_VALUE)
-                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(cbCidadeDoacao, 0, 163, Short.MAX_VALUE)
+                            .addComponent(cbEstadoDoacao, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(26, Short.MAX_VALUE))
+                        .addComponent(cbCentroDoacao, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -170,47 +229,21 @@ public class PrincipalDoador extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbEstadoDoacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbCidadeDoacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
-                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                    .addComponent(cbCentroDoacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jComboBox4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbCategoriaDoacao, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "Itens", "Quantidade", ""
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setResizable(false);
-            jTable1.getColumnModel().getColumn(1).setResizable(false);
-            jTable1.getColumnModel().getColumn(2).setResizable(false);
-        }
 
         jPanel5.setBackground(new java.awt.Color(51, 51, 51));
 
@@ -221,17 +254,17 @@ public class PrincipalDoador extends javax.swing.JFrame {
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap(16, Short.MAX_VALUE)
                 .addComponent(jLabel6)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addGap(14, 14, 14))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15))
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         botaoSalvarDoacao.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -242,50 +275,204 @@ public class PrincipalDoador extends javax.swing.JFrame {
             }
         });
 
-        jLabel7.setText("Lista de itens escolhidos para cadastrar no banco");
+        tabelaDoacao.setModel(new javax.swing.table.DefaultTableModel(
+            new Doacao [][] {
+
+            },
+            new String [] {
+                "Item", "Quantidade"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                true, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tabelaDoacao.getTableHeader().setReorderingAllowed(false);
+        jScrollPane3.setViewportView(tabelaDoacao);
+        if (tabelaDoacao.getColumnModel().getColumnCount() > 0) {
+            tabelaDoacao.getColumnModel().getColumn(0).setResizable(false);
+            tabelaDoacao.getColumnModel().getColumn(0).setPreferredWidth(150);
+            tabelaDoacao.getColumnModel().getColumn(1).setResizable(false);
+            tabelaDoacao.getColumnModel().getColumn(1).setPreferredWidth(50);
+        }
+
+        jlItem.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jlItem.setText("Item");
+
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel12.setText("Quantidade Doada");
+
+        jsQuantidade.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jsQuantidade.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
+
+        jbAdicionar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jbAdicionar.setText("Adicinar");
+        jbAdicionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbAdicionarActionPerformed(evt);
+            }
+        });
+
+        tabelaRequisicao.setModel(new javax.swing.table.DefaultTableModel(
+            new Requisicao [][] {
+
+            },
+            new String [] {
+                "Item", "Quantidade"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tabelaRequisicao.setRowHeight(25);
+        tabelaRequisicao.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tabelaRequisicao.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane4.setViewportView(tabelaRequisicao);
+        if (tabelaRequisicao.getColumnModel().getColumnCount() > 0) {
+            tabelaRequisicao.getColumnModel().getColumn(0).setResizable(false);
+            tabelaRequisicao.getColumnModel().getColumn(0).setPreferredWidth(150);
+            tabelaRequisicao.getColumnModel().getColumn(1).setResizable(false);
+            tabelaRequisicao.getColumnModel().getColumn(1).setPreferredWidth(50);
+        }
+
+        jlQuantidade.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jlQuantidade.setText("Quantidade");
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGap(13, 13, 13)
+                        .addComponent(jlItem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jlQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(25, 25, 25))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jbAdicionar)
+                        .addGap(113, 113, 113))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
+                        .addComponent(jsQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jlItem)
+                            .addComponent(jlQuantidade))
+                        .addGap(42, 42, 42)
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel12)
+                            .addComponent(jsQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(68, 68, 68)
+                        .addComponent(jbAdicionar))
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(30, Short.MAX_VALUE))
+        );
+
+        jbEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/pen.png"))); // NOI18N
+        jbEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbEditarActionPerformed(evt);
+            }
+        });
+
+        jbDeletar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/remove.png"))); // NOI18N
+        jbDeletar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbDeletarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 122, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(35, 35, 35)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(botaoSalvarDoacao)
-                        .addGap(140, 140, 140))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                .addGap(130, 130, 130)
+                                .addComponent(botaoSalvarDoacao)))
+                        .addGap(40, 40, 40)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jbDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jbEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(72, 72, 72))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(111, 111, 111))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(76, 76, 76))))
+                        .addGap(192, 192, 192))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(15, 15, 15)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 459, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(49, 49, 49)
+                                .addComponent(jbEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jbDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(botaoSalvarDoacao)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(103, 103, 103)
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(botaoSalvarDoacao)
-                        .addGap(68, 68, 68))))
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(43, 43, 43))))
         );
 
         painelDoador.addTab("Realizar Doação", jPanel2);
@@ -500,14 +687,14 @@ public class PrincipalDoador extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 658, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(235, Short.MAX_VALUE))
+                .addContainerGap(574, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 489, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(139, Short.MAX_VALUE))
+                .addContainerGap(188, Short.MAX_VALUE))
         );
 
         painelDoador.addTab("Alterar Dados", jPanel3);
@@ -573,15 +760,58 @@ public class PrincipalDoador extends javax.swing.JFrame {
                 .addComponent(painelDoador))
         );
 
-        setSize(new java.awt.Dimension(913, 665));
+        setSize(new java.awt.Dimension(1252, 825));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    public void evento() {
+        selectionModel.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting() && selectionModel.getSelectedItemsCount() != 0) {
+
+                    String nomeItem = String.valueOf(tabelaRequisicao.getValueAt(tabelaRequisicao.getSelectedRow(), 0));
+                    String quantidadeMax = String.valueOf(tabelaRequisicao.getValueAt(tabelaRequisicao.getSelectedRow(), 1));
+                    jlItem.setText(nomeItem);
+                    jlQuantidade.setText(quantidadeMax);
+                    jlItem.setVisible(true);
+                    jlQuantidade.setVisible(true);
+                    jsQuantidade.setModel(new SpinnerNumberModel(0, 0, Integer.parseInt(quantidadeMax), 1));
+                }
+
+            }
+        });
+    }
     private void botaoSalvarDoacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSalvarDoacaoActionPerformed
-        painelDoador.setSelectedIndex(0);
+        Doacao doacao = new Doacao();
+        boolean executa = false;
+        if (tabelaDoacao.getRowCount() != 0) {
+            for (int i = 0; i < tabelaDoacao.getRowCount(); i++) {
+                doacao = (Doacao) tabelaDoacao.getValueAt(i, 0);
+                executa = new ExecutaDoacao(doacao).executarDoacao();
+                if (executa == true) {
+                    modeloTabelaDoacao.removeRow(i);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Erro ao realizar Doação " + doacao, "Erro", JOptionPane.ERROR_MESSAGE);
+
+                    break;
+                }
+
+            }
+            if (executa == true) {
+                JOptionPane.showMessageDialog(this, "Obrigado. Doação realizada com sucesso", "Doado", JOptionPane.INFORMATION_MESSAGE);
+                limpaCampos();
+                painelDoador.setSelectedIndex(0);
+
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Adicione itens para doar", "Adicionar", JOptionPane.INFORMATION_MESSAGE);
+
+        }
 
 
     }//GEN-LAST:event_botaoSalvarDoacaoActionPerformed
+
 
     private void cbEstadoAlterarItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbEstadoAlterarItemStateChanged
         //Lista as Cidades do Ustado selecionado sempre que hã alteração do Estado no comboBox
@@ -591,7 +821,9 @@ public class PrincipalDoador extends javax.swing.JFrame {
 
     private void painelDoadorStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_painelDoadorStateChanged
         // Condição que atualiza os dados sempre que há alteração das abas do sistema.
-        //
+        if (painelDoador.getSelectedIndex() == 1) {
+            populaEstadosComCentro();
+        }
         if (painelDoador.getSelectedIndex() == 2) {
             preencheCamposAlteracao();
             populaEstado();
@@ -624,35 +856,100 @@ public class PrincipalDoador extends javax.swing.JFrame {
     }//GEN-LAST:event_jtfAlterarCepFocusGained
 
     private void jbSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSairActionPerformed
-        int v = JOptionPane.showConfirmDialog(this, "Realmente deseja Sair?", "Sair", JOptionPane.YES_NO_OPTION);
-        if (v == 0) {
-            UsuarioLogado usuarioLogOf = new UsuarioLogado();
-            usuarioLogOf.logOf();
-            BoasVindas boasVindas = new BoasVindas();
-            boasVindas.setVisible(true);
-            this.dispose();
-        }
+
     }//GEN-LAST:event_jbSairActionPerformed
+
+    private void cbEstadoDoacaoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbEstadoDoacaoItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            populaCidadesComCentro();
+            if (cbEstadoDoacao.getSelectedIndex() == 0) {
+                cbCidadeDoacao.removeAllItems();
+                cbCentroDoacao.removeAllItems();
+                cbCategoriaDoacao.removeAllItems();
+            }
+        }
+
+    }//GEN-LAST:event_cbEstadoDoacaoItemStateChanged
+
+    private void cbCidadeDoacaoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbCidadeDoacaoItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            populaCentro();
+            if (cbCidadeDoacao.getSelectedIndex() == 0) {
+                cbCentroDoacao.removeAllItems();
+                cbCategoriaDoacao.removeAllItems();
+            }
+        }
+    }//GEN-LAST:event_cbCidadeDoacaoItemStateChanged
+
+    private void cbEstadoDoacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbEstadoDoacaoActionPerformed
+
+    }//GEN-LAST:event_cbEstadoDoacaoActionPerformed
+
+    private void cbCidadeDoacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCidadeDoacaoActionPerformed
+
+    }//GEN-LAST:event_cbCidadeDoacaoActionPerformed
+
+    private void cbCentroDoacaoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbCentroDoacaoItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            populaCategoriasCentro();
+
+            if (cbCentroDoacao.getSelectedIndex() == 0) {
+                cbCategoriaDoacao.removeAllItems();
+                jlQuantidade.setVisible(false);
+                jlItem.setVisible(false);
+            }
+
+        }
+    }//GEN-LAST:event_cbCentroDoacaoItemStateChanged
+
+    private void cbCategoriaDoacaoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbCategoriaDoacaoItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            populaTabelaRequisicoes();
+            jlQuantidade.setVisible(false);
+            jlItem.setVisible(false);
+
+            if (cbCategoriaDoacao.getSelectedIndex() == 0) {
+                modeloTabeloRequisicao.setRowCount(0);
+                jlQuantidade.setVisible(false);
+                jlItem.setVisible(false);
+            }
+
+        }
+    }//GEN-LAST:event_cbCategoriaDoacaoItemStateChanged
+
+    private void jbAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAdicionarActionPerformed
+        adicionaDoacao();
+    }//GEN-LAST:event_jbAdicionarActionPerformed
+
+    private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
+        editarDoacao();
+
+    }//GEN-LAST:event_jbEditarActionPerformed
+
+    private void jbDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbDeletarActionPerformed
+        removerDoacao();
+
+    }//GEN-LAST:event_jbDeletarActionPerformed
 
     /*Metodo que utiliza dos dados salvos na classe UsuarioLogado para definir
     os campos de alteração de dados
      */
     public void preencheCamposAlteracao() {
 
-        //Preenche os campos de dados pessoais 
-        jtfAlterarNome.setText(doadorLogado.getNome());
-        jtfAlterarCpfCnpj.setText(doadorLogado.getCpf_cnpj());
-        jtfAlterarEmail.setText(doadorLogado.getEmail());
-        jtfAlterarTelefone.setText(doadorLogado.getTelefone());
+    //Preenche os campos de dados pessoais 
+    jtfAlterarNome.setText(doadorLogado.getNome());
+    jtfAlterarCpfCnpj.setText(doadorLogado.getCpf_cnpj());
+    jtfAlterarEmail.setText(doadorLogado.getEmail());
+    jtfAlterarTelefone.setText(doadorLogado.getTelefone());
 
-        //Preenche os campos de endereço
-        jtfAlterarCep.setText(enderecoUsuarioLogado.getCep());
-        jtfAlterarRua.setText(enderecoUsuarioLogado.getRua());
-        jtfAlterarBairro.setText(enderecoUsuarioLogado.getBairro());
-        jtfAlterarNumero.setText(String.valueOf(enderecoUsuarioLogado.getNumero()));
-        jtfAlterarComplemento.setText(enderecoUsuarioLogado.getComplemento());
+    //Preenche os campos de endereço
+    jtfAlterarCep.setText(enderecoUsuarioLogado.getCep());
+    jtfAlterarRua.setText(enderecoUsuarioLogado.getRua());
+    jtfAlterarBairro.setText(enderecoUsuarioLogado.getBairro());
+    jtfAlterarNumero.setText(String.valueOf(enderecoUsuarioLogado.getNumero()));
+    jtfAlterarComplemento.setText(enderecoUsuarioLogado.getComplemento());
 
-    }
+}
 
     /*
     Metodo utilizado para popular o comboBox de estados na aba 
@@ -660,184 +957,357 @@ public class PrincipalDoador extends javax.swing.JFrame {
     E definir o Estado e Cidade do usuaro
      */
     public void populaEstado() {
-        cbEstadoAlterar.removeAllItems();
+    cbEstadoAlterar.removeAllItems();
 
-        EstadoServico estadosServico = new EstadoServico();//Obijeto para realizar buscas no banco de dados
-        List<Estado> estados = estadosServico.listaEstados();// Criação da lista com as siglas dos estados
+    EstadoServico estadosServico = new EstadoServico();//Obijeto para realizar buscas no banco de dados
+    List<Estado> estados = estadosServico.listaEstados();// Criação da lista com as siglas dos estados
 
-        //interando lista e adicinando ao comboBox
-        for (Estado estado : estados) {
-            cbEstadoAlterar.addItem(estado.getSiglaEstado());
+    //interando lista e adicinando ao comboBox
+    for (Estado estado : estados) {
+        cbEstadoAlterar.addItem(estado.getSiglaEstado());
 
-        }
-        //Definição do estaddo usuario no comboBox de Estados 
-        cbEstadoAlterar.setSelectedItem(enderecoUsuarioLogado.getEstadoEndereco());
-        //Definição da cidade do usuario no comboBox de Cidade
-        populaCidade();
-        cbCidadeAlterar.setSelectedItem(enderecoUsuarioLogado.getCidadeEndereco());
     }
+    //Definição do estaddo usuario no comboBox de Estados 
+    cbEstadoAlterar.setSelectedItem(enderecoUsuarioLogado.getEstadoEndereco());
+    //Definição da cidade do usuario no comboBox de Cidade
+    populaCidade();
+    cbCidadeAlterar.setSelectedItem(enderecoUsuarioLogado.getCidadeEndereco());
+}
 
     /*
     Metodo para criar lista de todas as cidades de um determinado estado
      */
     public void populaCidade() {
-        cbCidadeAlterar.removeAllItems();
-        String uf = String.valueOf(cbEstadoAlterar.getSelectedItem()); //Estado para listar cidades
-        CidadeServico cidadeServico = new CidadeServico(); // Objeto para realizar buscas no banco
-        List<Cidade> cidades = cidadeServico.listaCidade(uf); // Criação da lista com as cidades do estado escolhido 
+    cbCidadeAlterar.removeAllItems();
+    String uf = String.valueOf(cbEstadoAlterar.getSelectedItem()); //Estado para listar cidades
+    CidadeServico cidadeServico = new CidadeServico(); // Objeto para realizar buscas no banco
+    List<Cidade> cidades = cidadeServico.listaCidade(uf); // Criação da lista com as cidades do estado escolhido 
 
-        //Interando lista de cidades de adicionando ao comboBox de Cidades
-        for (Cidade cidade : cidades) {
-            cbCidadeAlterar.addItem(cidade.getNomeCidade());
-        }
+    //Interando lista de cidades de adicionando ao comboBox de Cidades
+    for (Cidade cidade : cidades) {
+        cbCidadeAlterar.addItem(cidade.getNomeCidade());
     }
+}
 
     public void atualizarDados() {
-        Doador doadorAtualizado = new Doador(usuario.getIdUsuario(),
-                jtfAlterarNome.getText(),
-                jtfAlterarCpfCnpj.getText(),
-                jtfAlterarTelefone.getText(),
-                jtfAlterarEmail.getText(),
-                null);
+    Doador doadorAtualizado = new Doador(usuario.getIdUsuario(),
+            jtfAlterarNome.getText(),
+            jtfAlterarCpfCnpj.getText(),
+            jtfAlterarTelefone.getText(),
+            jtfAlterarEmail.getText(),
+            null);
 
-        DoadorServico doadorServico = new DoadorServico();
-        Doador doadorValida = doadorServico.atualizaDoador(doadorAtualizado);
-        if (doadorValida == null) {
-            JOptionPane.showMessageDialog(this, "Erro ao atualizar dados pessoais", "Erro", JOptionPane.ERROR_MESSAGE);
-        } else {
-            usuario.setDoadorLogado(doadorValida);
-            doadorLogado = doadorValida;
+    DoadorServico doadorServico = new DoadorServico();
+    Doador doadorValida = doadorServico.atualizaDoador(doadorAtualizado);
+    if (doadorValida == null) {
+        JOptionPane.showMessageDialog(this, "Erro ao atualizar dados pessoais", "Erro", JOptionPane.ERROR_MESSAGE);
+    } else {
+        usuario.setDoadorLogado(doadorValida);
+        doadorLogado = doadorValida;
 
-            JOptionPane.showMessageDialog(this, "Dados atualizados com sucesso", "Atualizado", JOptionPane.INFORMATION_MESSAGE);
-            painelDoador.setSelectedIndex(0);
-
-        }
+        JOptionPane.showMessageDialog(this, "Dados atualizados com sucesso", "Atualizado", JOptionPane.INFORMATION_MESSAGE);
+        painelDoador.setSelectedIndex(0);
 
     }
+
+}
 
     public void atualizarEndereco() {
-        String uf = String.valueOf(cbEstadoAlterar.getSelectedItem());
-        String cidade = String.valueOf(cbCidadeAlterar.getSelectedItem());
-        int numero = Integer.parseInt(jtfAlterarNumero.getText());
-        Endereco enderecoAtualizado = new Endereco(uf, cidade,
-                jtfAlterarCep.getText(),
-                jtfAlterarRua.getText(),
-                jtfAlterarBairro.getText(),
-                numero,
-                jtfAlterarComplemento.getText());
+    String uf = String.valueOf(cbEstadoAlterar.getSelectedItem());
+    String cidade = String.valueOf(cbCidadeAlterar.getSelectedItem());
+    int numero = Integer.parseInt(jtfAlterarNumero.getText());
+    Endereco enderecoAtualizado = new Endereco(uf, cidade,
+            jtfAlterarCep.getText(),
+            jtfAlterarRua.getText(),
+            jtfAlterarBairro.getText(),
+            numero,
+            jtfAlterarComplemento.getText());
 
-        EnderecoServico enderecoServico = new EnderecoServico();
-        Endereco enderecoValida = enderecoServico.atualizaEnderecoDoador(enderecoAtualizado, usuario.getIdUsuario());
-        if (enderecoValida == null) {
-            JOptionPane.showMessageDialog(this, "Erro ao atualizar endereço do Doador", "Erro", JOptionPane.ERROR_MESSAGE);
-        } else {
-            usuario.setEnderecoUsuarioLogado(enderecoValida);
-            enderecoUsuarioLogado = enderecoValida;
+    EnderecoServico enderecoServico = new EnderecoServico();
+    Endereco enderecoValida = enderecoServico.atualizaEnderecoDoador(enderecoAtualizado, usuario.getIdUsuario());
+    if (enderecoValida == null) {
+        JOptionPane.showMessageDialog(this, "Erro ao atualizar endereço do Doador", "Erro", JOptionPane.ERROR_MESSAGE);
+    } else {
+        usuario.setEnderecoUsuarioLogado(enderecoValida);
+        enderecoUsuarioLogado = enderecoValida;
 
-            JOptionPane.showMessageDialog(this, "Endereço atualizado com sucesso", "Atualizado", JOptionPane.INFORMATION_MESSAGE);
-            painelDoador.setSelectedIndex(0);
-        }
+        JOptionPane.showMessageDialog(this, "Endereço atualizado com sucesso", "Atualizado", JOptionPane.INFORMATION_MESSAGE);
+        painelDoador.setSelectedIndex(0);
     }
+}
 
     public boolean validarDadosPessoais() {
-        String cpfCnpj = jtfAlterarCpfCnpj.getText();
-        String replaceAll = cpfCnpj.replaceAll("-.", "");
-       //cpfCnpj.replaceAll("-", "");
-        if (jtfAlterarNome.getText().isBlank()) {
-            JOptionPane.showMessageDialog(this, "Preencha todos os campos", "Erro", JOptionPane.INFORMATION_MESSAGE);
-            return false;
-        }
-        if (cpfCnpj.length() == 11) {
-            VerificaCpf verificarcpf = new VerificaCpf();
-            verificarcpf.validaCpf(cpfCnpj);
-            if (verificarcpf.isResultado() == false) {
-                JOptionPane.showMessageDialog(this, "CPF invalido", "Erro", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-        }
-        if (cpfCnpj.length() != 11 && cpfCnpj.length() != 14) {
-
-            return false;
-        }
-        if (jtfAlterarTelefone.getText().length() != 16) {
-            JOptionPane.showMessageDialog(this, "Digite corretamente o telefone ", "Erro", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        if (!jtfAlterarEmail.getText().contains("@")) {
-            JOptionPane.showMessageDialog(this, "Digite um E-mail valido", "Erro", JOptionPane.INFORMATION_MESSAGE);
-            return false;
-        }
-
-        return true;
+    String cpfCnpj = jtfAlterarCpfCnpj.getText();
+    String replaceAll = cpfCnpj.replaceAll("-.", "");
+    //cpfCnpj.replaceAll("-", "");
+    if (jtfAlterarNome.getText().isBlank()) {
+        JOptionPane.showMessageDialog(this, "Preencha todos os campos", "Erro", JOptionPane.INFORMATION_MESSAGE);
+        return false;
     }
+    if (cpfCnpj.length() == 11) {
+        VerificaCpf verificarcpf = new VerificaCpf();
+        verificarcpf.validaCpf(cpfCnpj);
+        if (verificarcpf.isResultado() == false) {
+            JOptionPane.showMessageDialog(this, "CPF invalido", "Erro", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+    if (cpfCnpj.length() != 11 && cpfCnpj.length() != 14) {
+
+        return false;
+    }
+    if (jtfAlterarTelefone.getText().length() != 16) {
+        JOptionPane.showMessageDialog(this, "Digite corretamente o telefone ", "Erro", JOptionPane.ERROR_MESSAGE);
+        return false;
+    }
+
+    if (!jtfAlterarEmail.getText().contains("@")) {
+        JOptionPane.showMessageDialog(this, "Digite um E-mail valido", "Erro", JOptionPane.INFORMATION_MESSAGE);
+        return false;
+    }
+
+    return true;
+}
 
     public boolean validarEndereco() {
-        if (jtfAlterarCep.getText().length() != 10) {
-            JOptionPane.showMessageDialog(this, "Digite um CEP valido", "Erro", JOptionPane.ERROR_MESSAGE);
-            return false;
+    if (jtfAlterarCep.getText().length() != 10) {
+        JOptionPane.showMessageDialog(this, "Digite um CEP valido", "Erro", JOptionPane.ERROR_MESSAGE);
+        return false;
+    }
+    String rua, bairro, numero;
+    rua = jtfAlterarRua.getText();
+    bairro = jtfAlterarBairro.getText();
+    numero = jtfAlterarNumero.getText();
+    if (rua.isBlank() || bairro.isBlank() || numero.isBlank()) {
+        JOptionPane.showMessageDialog(this, "Digite o endereço completo", "Erro", JOptionPane.INFORMATION_MESSAGE);
+        return false;
+    }
+    return true;
+}
+
+    public void populaEstadosComCentro() {
+    EstadoServico estadoServico = new EstadoServico();
+    List<Estado> estadosComCentro = estadoServico.buscaEstadosComCentro(StatusRequisicao.ABERTA);
+
+    if (estadosComCentro != null) {
+        cbEstadoDoacao.removeAllItems();
+        cbEstadoDoacao.insertItemAt(new Estado("Selecione um Estado", 1), 0);
+        cbEstadoDoacao.setSelectedIndex(0);
+        for (Estado i : estadosComCentro) {
+            cbEstadoDoacao.addItem(i);
         }
-        String rua, bairro, numero;
-        rua = jtfAlterarRua.getText();
-        bairro = jtfAlterarBairro.getText();
-        numero = jtfAlterarNumero.getText();
-        if (rua.isBlank() || bairro.isBlank() || numero.isBlank()) {
-            JOptionPane.showMessageDialog(this, "Digite o endereço completo", "Erro", JOptionPane.INFORMATION_MESSAGE);
-            return false;
-        }
-        return true;
+
+    } else {
+        JOptionPane.showMessageDialog(this, "Não foi possivel encontrar Estados com Centros de Recebimento", "Erro", JOptionPane.ERROR_MESSAGE);
+
     }
 
-    public void iniciaUsuario() {
+}
 
-        System.out.println(doadorLogado.getIdDoador());
-        System.out.println(doadorLogado.getNome());
+    public void populaCidadesComCentro() {
+    CidadeServico cidadeServico = new CidadeServico();
+    Estado uf = (Estado) (cbEstadoDoacao.getSelectedItem());
+    if (uf.getIdEstado() != 1) {
+        List<Cidade> cidadesComCentro = cidadeServico.buscaCidadesComCentroAtivo(uf.getSiglaEstado(), StatusRequisicao.ABERTA);
 
+        if (cidadesComCentro != null) {
+            cbCidadeDoacao.removeAllItems();
+            cbCidadeDoacao.insertItemAt(new Cidade("Escolha uma Cidade", "X"), 0);
+            cbCidadeDoacao.setSelectedIndex(0);
+
+            for (Cidade i : cidadesComCentro) {
+                cbCidadeDoacao.addItem(i);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Não foi possivel encontrar Cidades com Centros de Recebimento", "Erro", JOptionPane.ERROR_MESSAGE);
+
+        }
+    }
+}
+
+    public void populaCentro() {
+    CentroRecebimentoServico centroServico = new CentroRecebimentoServico();
+    Cidade cidade = (Cidade) cbCidadeDoacao.getSelectedItem();
+    if (cidade.getEstadoCidade().equals("@")) {
+        List<CentroRecebimento> centros = centroServico.buscaCentroPorCidade(cidade.getNomeCidade(), StatusRequisicao.ABERTA);
+
+        if (centros != null) {
+            cbCentroDoacao.removeAllItems();
+            cbCentroDoacao.insertItemAt(new CentroRecebimento("Selecione um Centro de Recebimento", 0), 0);
+            cbCentroDoacao.setSelectedIndex(0);
+
+            for (CentroRecebimento i : centros) {
+                cbCentroDoacao.addItem(i);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Não foi possivel encontrar Centros de Recebimento", "Erro", JOptionPane.ERROR_MESSAGE);
+
+        }
     }
 
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+}
+
+    public void populaCategoriasCentro() {
+    CategoriaItemServico categoriaServico = new CategoriaItemServico();
+    CentroRecebimento centro = (CentroRecebimento) cbCentroDoacao.getSelectedItem();
+    if (cbCentroDoacao.getSelectedIndex() != 0) {
+        List<CategoriaItem> categoriasCentro = categoriaServico.buscaCategoriaCentroComStatus(centro.getIdCentroRebebimento(), StatusRequisicao.ABERTA);
+
+        if (categoriasCentro != null) {
+            cbCategoriaDoacao.removeAllItems();
+            cbCategoriaDoacao.insertItemAt(new CategoriaItem("Selecione uma Categoria", 0), 0);
+            cbCategoriaDoacao.setSelectedIndex(0);
+            for (CategoriaItem i : categoriasCentro) {
+                cbCategoriaDoacao.addItem(i);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Não foi possivel encontrar Categoria no Centros de Recebimento", "Erro", JOptionPane.ERROR_MESSAGE);
+
+        }
+    }
+}
+
+    public void populaTabelaRequisicoes() {
+    modeloTabeloRequisicao.setRowCount(0);
+    RequisicaoServico requisicaoServico = new RequisicaoServico();
+    CentroRecebimento centroSelecionado = (CentroRecebimento) cbCentroDoacao.getSelectedItem();
+    CategoriaItem categoriaSelecionada = (CategoriaItem) cbCategoriaDoacao.getSelectedItem();
+    int idCentroSelecionado = centroSelecionado.getIdCentroRebebimento();
+    int idCategoria = categoriaSelecionada.getIdCategoria();
+
+    if (cbCategoriaDoacao.getSelectedIndex() != 0) {
+        List<Requisicao> requisicoes = requisicaoServico.buscaRequisicoesPorStatus(idCentroSelecionado, idCategoria, StatusRequisicao.ABERTA);
+        if (requisicoes != null) {
+            for (Requisicao i : requisicoes) {
+                Object requisicao[] = {i, i.getQuantidade()};
+                modeloTabeloRequisicao.addRow(requisicao);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Não foi possivel encontrar Requisiçôes do Centros de Recebimento", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+}
+
+    public void adicionaDoacao() {
+    if (tabelaRequisicao.getSelectedRowCount() != 0) {
+        int row = tabelaRequisicao.getSelectedRow();
+
+        int quantidadeDoar = Integer.parseInt(String.valueOf(jsQuantidade.getValue()));
+        if (quantidadeDoar != 0) {
+            Requisicao requisicaoSeleciona = (Requisicao) tabelaRequisicao.getValueAt(row, 0);
+            Doacao doacao = new Doacao(doadorLogado.getIdDoador(),
+                    requisicaoSeleciona.getIdCentroRequisitor(),
+                    requisicaoSeleciona.getIdRequisicao(),
+                    requisicaoSeleciona.getIdItenRequerido(),
+                    requisicaoSeleciona.getNomeItem(),
+                    quantidadeDoar);
+
+            boolean existe = false;
+
+            for (int i = 0; i < tabelaDoacao.getRowCount(); i++) {
+                Doacao doacaoI = (Doacao) tabelaDoacao.getValueAt(i, 0);
+                if (doacaoI.getIdItemDoado() == doacao.getIdItemDoado()) {
+                    modeloTabelaDoacao.setValueAt(doacao.getQuantidadeDoada(), i, 1);
+                    existe = true;
+
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PrincipalDoador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PrincipalDoador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PrincipalDoador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PrincipalDoador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new PrincipalDoador().setVisible(true);
+            if (!existe) {
+
+                Object doacaoObjetct[] = {doacao, doacao.getQuantidadeDoada()};
+                modeloTabelaDoacao.addRow(doacaoObjetct);
             }
-        });
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Informe a quantidade que deseja doar", "Quantidade", JOptionPane.INFORMATION_MESSAGE);
+
+        }
+
+    } else {
+        JOptionPane.showMessageDialog(this, "Selecione um item para doar", "Selecione", JOptionPane.INFORMATION_MESSAGE);
     }
+}
+
+    public void editarDoacao() {
+    int quantidadeSelecionada = tabelaDoacao.getSelectedRowCount();
+    if (quantidadeSelecionada != 0) {
+        int row = tabelaDoacao.getSelectedRow();
+        Doacao doacaoEditar = (Doacao) tabelaDoacao.getValueAt(row, 0);
+        EditarItem editor = new EditarItem(this, true);
+        editor.setComponetesRequisicao(doacaoEditar);
+        editor.setVisible(true);
+        if (editor.getReturnStatus() == 1) {
+            int quantidadeEdita = editor.quantidadeAlterada();
+            doacaoEditar.setQuantidadeDoada(quantidadeEdita);
+            tabelaDoacao.setValueAt(doacaoEditar.getQuantidadeDoada(), row, 1);
+        }
+
+    } else {
+        JOptionPane.showMessageDialog(this, "Selecione um item para alterar a quantidade", "Alterar Quantidade", JOptionPane.INFORMATION_MESSAGE);
+    }
+}
+
+    public void removerDoacao() {
+    int linhasSelecionadas = tabelaDoacao.getSelectedRowCount();
+    if (linhasSelecionadas == 0) {
+        JOptionPane.showMessageDialog(this, "Selecione um item para remover", "Remover", JOptionPane.INFORMATION_MESSAGE);
+
+    } else {
+        int row = tabelaDoacao.getSelectedRow();
+        Doacao doacaoRemover = (Doacao) tabelaDoacao.getValueAt(row, 0);
+        int v = JOptionPane.showConfirmDialog(this, "Deseja remover a Doação '" + doacaoRemover + "'?", "Remover", JOptionPane.YES_NO_OPTION);
+        if (v == 0) {
+            modeloTabelaDoacao.removeRow(row);
+        }
+    }
+
+}
+
+    public void limpaCampos() {
+    modeloTabelaDoacao.setRowCount(0);
+    modeloTabeloRequisicao.setRowCount(0);
+
+    cbEstadoDoacao.setSelectedIndex(0);
+
+    jlItem.setVisible(false);
+    jlQuantidade.setVisible(false);
+    jsQuantidade.setValue(0);
+
+}
+
+    public void logOff() {
+    int v = JOptionPane.showConfirmDialog(this, "Realmente deseja Sair?", "Sair", JOptionPane.YES_NO_OPTION);
+    if (v == 0) {
+        UsuarioLogado usuarioLogOf = new UsuarioLogado();
+        usuarioLogOf.logOff();
+        limpaCampos();
+        BoasVindas boasVindas = new BoasVindas();
+        boasVindas.setVisible(true);
+        this.dispose();
+    }
+}
+
+    public void setLabelBemVindo() {
+    String nome = doadorLogado.getNome();
+    String nomeDividido[] = nome.split(" ");
+    jlBemVindo.setText("Bem-Vindo " + nomeDividido[0]);
+}
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botaoSalvarDoacao;
+    private javax.swing.JComboBox<CategoriaItem> cbCategoriaDoacao;
+    private javax.swing.JComboBox<CentroRecebimento> cbCentroDoacao;
     private javax.swing.JComboBox<String> cbCidadeAlterar;
+    private javax.swing.JComboBox<Cidade> cbCidadeDoacao;
     private javax.swing.JComboBox<String> cbEstadoAlterar;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JComboBox<String> jComboBox4;
+    private javax.swing.JComboBox<Estado> cbEstadoDoacao;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -850,7 +1320,6 @@ public class PrincipalDoador extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -861,13 +1330,20 @@ public class PrincipalDoador extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel jPanel9;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JButton jbAdicionar;
     private javax.swing.JButton jbAtualizarDados;
     private javax.swing.JButton jbAtualizarEndereco;
+    private javax.swing.JButton jbDeletar;
+    private javax.swing.JButton jbEditar;
     private javax.swing.JButton jbSair;
     private javax.swing.JLabel jlBemVindo;
+    private javax.swing.JLabel jlItem;
+    private javax.swing.JLabel jlQuantidade;
+    private javax.swing.JSpinner jsQuantidade;
     private javax.swing.JTextField jtfAlterarBairro;
     private javax.swing.JTextField jtfAlterarCep;
     private javax.swing.JTextField jtfAlterarComplemento;
@@ -878,5 +1354,7 @@ public class PrincipalDoador extends javax.swing.JFrame {
     private javax.swing.JTextField jtfAlterarRua;
     private javax.swing.JTextField jtfAlterarTelefone;
     private javax.swing.JTabbedPane painelDoador;
+    private javax.swing.JTable tabelaDoacao;
+    private javax.swing.JTable tabelaRequisicao;
     // End of variables declaration//GEN-END:variables
 }

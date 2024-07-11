@@ -13,6 +13,10 @@ public class Estado {
     private String siglaEstado;
     private int idEstado;
 
+    public Estado() {
+    }
+    
+
     public Estado(String siglaEstado, int idEstado) {
         this.siglaEstado = siglaEstado;
         this.idEstado = idEstado;
@@ -32,6 +36,11 @@ public class Estado {
 
     public void setIdEstado(int idEstado) {
         this.idEstado = idEstado;
+    }
+
+    @Override
+    public String toString() {
+        return siglaEstado;
     }
     
     

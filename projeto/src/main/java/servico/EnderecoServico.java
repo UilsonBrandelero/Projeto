@@ -52,6 +52,7 @@ public class EnderecoServico {
 
         } catch (SQLException e) {
             System.out.println("Não salvou o endereco no banco " + e.getMessage());
+            return null;
         } finally {
             try {
                 if (stmt != null) {
@@ -280,4 +281,5 @@ public class EnderecoServico {
         }
         return enderecoAtualizado;
 }
+    
 }
