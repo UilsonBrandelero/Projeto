@@ -34,9 +34,8 @@ import util.VerificaCpf;
 
 /**
  *
- * @author uilso
+ * Tela principal de usuario do tipo Doador
  */
-
 public class PrincipalDoador extends javax.swing.JFrame {
 
     DefaultTableModel modeloTabeloRequisicao;
@@ -46,11 +45,12 @@ public class PrincipalDoador extends javax.swing.JFrame {
     public PrincipalDoador() {
         initComponents();
 
-        jlBemVindo.setText("Bem Vindo " + doadorLogado.getNome());
+        setLabelBemVindo();
         this.modeloTabelaDoacao = (DefaultTableModel) tabelaDoacao.getModel();
         this.modeloTabeloRequisicao = (DefaultTableModel) tabelaRequisicao.getModel();
         this.selectionModel = tabelaRequisicao.getSelectionModel();
-        evento();
+        eventoTabelaRequisicao();
+
     }
     UsuarioLogado usuario = new UsuarioLogado();
     Doador doadorLogado = new Doador(usuario.getDoadorLogado());
@@ -122,11 +122,12 @@ public class PrincipalDoador extends javax.swing.JFrame {
         jbAtualizarEndereco = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jbSair = new javax.swing.JButton();
         jlBemVindo = new javax.swing.JLabel();
+        jbSair = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(899, 650));
+        setResizable(false);
 
         painelDoador.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         painelDoador.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -147,8 +148,6 @@ public class PrincipalDoador extends javax.swing.JFrame {
         );
 
         painelDoador.addTab("Home", jPanel1);
-
-        jPanel4.setBackground(new java.awt.Color(51, 51, 51));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Estado");
@@ -244,8 +243,6 @@ public class PrincipalDoador extends javax.swing.JFrame {
                     .addComponent(cbCategoriaDoacao, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
-
-        jPanel5.setBackground(new java.awt.Color(51, 51, 51));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel6.setText("Itens Selecionados");
@@ -586,11 +583,6 @@ public class PrincipalDoador extends javax.swing.JFrame {
         });
 
         jtfAlterarCep.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jtfAlterarCep.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jtfAlterarCepFocusGained(evt);
-            }
-        });
 
         jtfAlterarRua.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
@@ -702,6 +694,9 @@ public class PrincipalDoador extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         jLabel1.setText("Doador");
 
+        jlBemVindo.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jlBemVindo.setText("Lable bem-vindo");
+
         jbSair.setText("Sair");
         jbSair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -709,47 +704,46 @@ public class PrincipalDoador extends javax.swing.JFrame {
             }
         });
 
-        jlBemVindo.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jlBemVindo.setText("Lable bem-vindo");
-
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(43, 43, 43)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(207, 207, 207)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 191, Short.MAX_VALUE)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                        .addComponent(jbSair)
-                        .addContainerGap())
+                        .addComponent(jlBemVindo, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(36, 36, 36))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                        .addComponent(jlBemVindo, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(24, 24, 24))))
+                        .addComponent(jbSair)
+                        .addGap(62, 62, 62))))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addComponent(jbSair)
-                .addGap(18, 18, 18)
-                .addComponent(jlBemVindo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(27, 27, 27))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jbSair)
+                        .addGap(20, 20, 20)
+                        .addComponent(jlBemVindo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(painelDoador)
+            .addComponent(painelDoador, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(519, 519, 519)
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -764,7 +758,7 @@ public class PrincipalDoador extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    public void evento() {
+    public void eventoTabelaRequisicao() {
         selectionModel.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -831,6 +825,7 @@ public class PrincipalDoador extends javax.swing.JFrame {
     }//GEN-LAST:event_painelDoadorStateChanged
 
     private void jbAtualizarDadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAtualizarDadosActionPerformed
+        //Valida os dados pessoais antes de atualizar os registros no banco
         boolean validacao = validarDadosPessoais();
         if (validacao == true) {
             int v = JOptionPane.showConfirmDialog(this, "Deseja realmente alterar seus dados pessoais", "", JOptionPane.YES_NO_OPTION);
@@ -841,6 +836,7 @@ public class PrincipalDoador extends javax.swing.JFrame {
     }//GEN-LAST:event_jbAtualizarDadosActionPerformed
 
     private void jbAtualizarEnderecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAtualizarEnderecoActionPerformed
+        //Valida os dados de endereço antes de atualizar os registros no banco
         boolean validacao = validarEndereco();
         if (validarEndereco() == true) {
             int v = JOptionPane.showConfirmDialog(this, "Deseja realmente alterar seu endereço", "", JOptionPane.YES_NO_OPTION);
@@ -851,12 +847,8 @@ public class PrincipalDoador extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jbAtualizarEnderecoActionPerformed
 
-    private void jtfAlterarCepFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfAlterarCepFocusGained
-        jbAtualizarEndereco.setEnabled(true);
-    }//GEN-LAST:event_jtfAlterarCepFocusGained
-
     private void jbSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSairActionPerformed
-
+        logOff();
     }//GEN-LAST:event_jbSairActionPerformed
 
     private void cbEstadoDoacaoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbEstadoDoacaoItemStateChanged
@@ -936,20 +928,20 @@ public class PrincipalDoador extends javax.swing.JFrame {
      */
     public void preencheCamposAlteracao() {
 
-    //Preenche os campos de dados pessoais 
-    jtfAlterarNome.setText(doadorLogado.getNome());
-    jtfAlterarCpfCnpj.setText(doadorLogado.getCpf_cnpj());
-    jtfAlterarEmail.setText(doadorLogado.getEmail());
-    jtfAlterarTelefone.setText(doadorLogado.getTelefone());
+        //Preenche os campos de dados pessoais 
+        jtfAlterarNome.setText(doadorLogado.getNome());
+        jtfAlterarCpfCnpj.setText(doadorLogado.getCpf_cnpj());
+        jtfAlterarEmail.setText(doadorLogado.getEmail());
+        jtfAlterarTelefone.setText(doadorLogado.getTelefone());
 
-    //Preenche os campos de endereço
-    jtfAlterarCep.setText(enderecoUsuarioLogado.getCep());
-    jtfAlterarRua.setText(enderecoUsuarioLogado.getRua());
-    jtfAlterarBairro.setText(enderecoUsuarioLogado.getBairro());
-    jtfAlterarNumero.setText(String.valueOf(enderecoUsuarioLogado.getNumero()));
-    jtfAlterarComplemento.setText(enderecoUsuarioLogado.getComplemento());
+        //Preenche os campos de endereço
+        jtfAlterarCep.setText(enderecoUsuarioLogado.getCep());
+        jtfAlterarRua.setText(enderecoUsuarioLogado.getRua());
+        jtfAlterarBairro.setText(enderecoUsuarioLogado.getBairro());
+        jtfAlterarNumero.setText(String.valueOf(enderecoUsuarioLogado.getNumero()));
+        jtfAlterarComplemento.setText(enderecoUsuarioLogado.getComplemento());
 
-}
+    }
 
     /*
     Metodo utilizado para popular o comboBox de estados na aba 
@@ -957,343 +949,376 @@ public class PrincipalDoador extends javax.swing.JFrame {
     E definir o Estado e Cidade do usuaro
      */
     public void populaEstado() {
-    cbEstadoAlterar.removeAllItems();
+        cbEstadoAlterar.removeAllItems();
 
-    EstadoServico estadosServico = new EstadoServico();//Obijeto para realizar buscas no banco de dados
-    List<Estado> estados = estadosServico.listaEstados();// Criação da lista com as siglas dos estados
+        EstadoServico estadosServico = new EstadoServico();//Obijeto para realizar buscas no banco de dados
+        List<Estado> estados = estadosServico.listaEstados();// Criação da lista com as siglas dos estados
 
-    //interando lista e adicinando ao comboBox
-    for (Estado estado : estados) {
-        cbEstadoAlterar.addItem(estado.getSiglaEstado());
+        //interando lista e adicinando ao comboBox
+        for (Estado estado : estados) {
+            cbEstadoAlterar.addItem(estado.getSiglaEstado());
 
+        }
+        //Definição do estaddo usuario no comboBox de Estados 
+        cbEstadoAlterar.setSelectedItem(enderecoUsuarioLogado.getEstadoEndereco());
+        //Definição da cidade do usuario no comboBox de Cidade
+        populaCidade();
+        cbCidadeAlterar.setSelectedItem(enderecoUsuarioLogado.getCidadeEndereco());
     }
-    //Definição do estaddo usuario no comboBox de Estados 
-    cbEstadoAlterar.setSelectedItem(enderecoUsuarioLogado.getEstadoEndereco());
-    //Definição da cidade do usuario no comboBox de Cidade
-    populaCidade();
-    cbCidadeAlterar.setSelectedItem(enderecoUsuarioLogado.getCidadeEndereco());
-}
 
     /*
     Metodo para criar lista de todas as cidades de um determinado estado
      */
     public void populaCidade() {
-    cbCidadeAlterar.removeAllItems();
-    String uf = String.valueOf(cbEstadoAlterar.getSelectedItem()); //Estado para listar cidades
-    CidadeServico cidadeServico = new CidadeServico(); // Objeto para realizar buscas no banco
-    List<Cidade> cidades = cidadeServico.listaCidade(uf); // Criação da lista com as cidades do estado escolhido 
+        cbCidadeAlterar.removeAllItems();
+        String uf = String.valueOf(cbEstadoAlterar.getSelectedItem()); //Estado para listar cidades
+        CidadeServico cidadeServico = new CidadeServico(); // Objeto para realizar buscas no banco
+        List<Cidade> cidades = cidadeServico.listaCidade(uf); // Criação da lista com as cidades do estado escolhido 
 
-    //Interando lista de cidades de adicionando ao comboBox de Cidades
-    for (Cidade cidade : cidades) {
-        cbCidadeAlterar.addItem(cidade.getNomeCidade());
+        //Interando lista de cidades de adicionando ao comboBox de Cidades
+        for (Cidade cidade : cidades) {
+            cbCidadeAlterar.addItem(cidade.getNomeCidade());
+        }
     }
-}
+//Atualiza as informaçoes de cadastro do Doador
 
     public void atualizarDados() {
-    Doador doadorAtualizado = new Doador(usuario.getIdUsuario(),
-            jtfAlterarNome.getText(),
-            jtfAlterarCpfCnpj.getText(),
-            jtfAlterarTelefone.getText(),
-            jtfAlterarEmail.getText(),
-            null);
+        Doador doadorAtualizado = new Doador(usuario.getIdUsuario(),
+                jtfAlterarNome.getText(),
+                jtfAlterarCpfCnpj.getText(),
+                jtfAlterarTelefone.getText(),
+                jtfAlterarEmail.getText(),
+                null);
 
-    DoadorServico doadorServico = new DoadorServico();
-    Doador doadorValida = doadorServico.atualizaDoador(doadorAtualizado);
-    if (doadorValida == null) {
-        JOptionPane.showMessageDialog(this, "Erro ao atualizar dados pessoais", "Erro", JOptionPane.ERROR_MESSAGE);
-    } else {
-        usuario.setDoadorLogado(doadorValida);
-        doadorLogado = doadorValida;
+        DoadorServico doadorServico = new DoadorServico();
+        Doador doadorValida = doadorServico.atualizaDoador(doadorAtualizado);
+        if (doadorValida == null) {
+            JOptionPane.showMessageDialog(this, "Erro ao atualizar dados pessoais", "Erro", JOptionPane.ERROR_MESSAGE);
+        } else {
+            usuario.setDoadorLogado(doadorValida);
+            doadorLogado = doadorValida;
 
-        JOptionPane.showMessageDialog(this, "Dados atualizados com sucesso", "Atualizado", JOptionPane.INFORMATION_MESSAGE);
-        painelDoador.setSelectedIndex(0);
+            JOptionPane.showMessageDialog(this, "Dados atualizados com sucesso", "Atualizado", JOptionPane.INFORMATION_MESSAGE);
+            painelDoador.setSelectedIndex(0);
+
+        }
 
     }
-
-}
+//Atualiza o endereço cadastrado do Doador
 
     public void atualizarEndereco() {
-    String uf = String.valueOf(cbEstadoAlterar.getSelectedItem());
-    String cidade = String.valueOf(cbCidadeAlterar.getSelectedItem());
-    int numero = Integer.parseInt(jtfAlterarNumero.getText());
-    Endereco enderecoAtualizado = new Endereco(uf, cidade,
-            jtfAlterarCep.getText(),
-            jtfAlterarRua.getText(),
-            jtfAlterarBairro.getText(),
-            numero,
-            jtfAlterarComplemento.getText());
+        String uf = String.valueOf(cbEstadoAlterar.getSelectedItem());
+        String cidade = String.valueOf(cbCidadeAlterar.getSelectedItem());
+        int numero = Integer.parseInt(jtfAlterarNumero.getText());
+        Endereco enderecoAtualizado = new Endereco(uf, cidade,
+                jtfAlterarCep.getText(),
+                jtfAlterarRua.getText(),
+                jtfAlterarBairro.getText(),
+                numero,
+                jtfAlterarComplemento.getText());
 
-    EnderecoServico enderecoServico = new EnderecoServico();
-    Endereco enderecoValida = enderecoServico.atualizaEnderecoDoador(enderecoAtualizado, usuario.getIdUsuario());
-    if (enderecoValida == null) {
-        JOptionPane.showMessageDialog(this, "Erro ao atualizar endereço do Doador", "Erro", JOptionPane.ERROR_MESSAGE);
-    } else {
-        usuario.setEnderecoUsuarioLogado(enderecoValida);
-        enderecoUsuarioLogado = enderecoValida;
+        EnderecoServico enderecoServico = new EnderecoServico();
+        Endereco enderecoValida = enderecoServico.atualizaEnderecoDoador(enderecoAtualizado, usuario.getIdUsuario());
+        if (enderecoValida == null) {
+            JOptionPane.showMessageDialog(this, "Erro ao atualizar endereço do Doador", "Erro", JOptionPane.ERROR_MESSAGE);
+        } else {
+            usuario.setEnderecoUsuarioLogado(enderecoValida);
+            enderecoUsuarioLogado = enderecoValida;
 
-        JOptionPane.showMessageDialog(this, "Endereço atualizado com sucesso", "Atualizado", JOptionPane.INFORMATION_MESSAGE);
-        painelDoador.setSelectedIndex(0);
+            JOptionPane.showMessageDialog(this, "Endereço atualizado com sucesso", "Atualizado", JOptionPane.INFORMATION_MESSAGE);
+            painelDoador.setSelectedIndex(0);
+        }
     }
-}
+//Verifica se os dados digitados na alteração de cadastro são validos
 
     public boolean validarDadosPessoais() {
-    String cpfCnpj = jtfAlterarCpfCnpj.getText();
-    String replaceAll = cpfCnpj.replaceAll("-.", "");
-    //cpfCnpj.replaceAll("-", "");
-    if (jtfAlterarNome.getText().isBlank()) {
-        JOptionPane.showMessageDialog(this, "Preencha todos os campos", "Erro", JOptionPane.INFORMATION_MESSAGE);
-        return false;
-    }
-    if (cpfCnpj.length() == 11) {
-        VerificaCpf verificarcpf = new VerificaCpf();
-        verificarcpf.validaCpf(cpfCnpj);
-        if (verificarcpf.isResultado() == false) {
-            JOptionPane.showMessageDialog(this, "CPF invalido", "Erro", JOptionPane.ERROR_MESSAGE);
+        String cpfCnpj = jtfAlterarCpfCnpj.getText();
+        String replaceAll = cpfCnpj.replaceAll("-.", "");
+        //cpfCnpj.replaceAll("-", "");
+        if (jtfAlterarNome.getText().isBlank()) {
+            JOptionPane.showMessageDialog(this, "Preencha todos os campos", "Erro", JOptionPane.INFORMATION_MESSAGE);
             return false;
         }
-    }
-    if (cpfCnpj.length() != 11 && cpfCnpj.length() != 14) {
+        if (cpfCnpj.length() == 11) {
+            VerificaCpf verificarcpf = new VerificaCpf();
+            verificarcpf.validaCpf(cpfCnpj);
+            if (verificarcpf.isResultado() == false) {
+                JOptionPane.showMessageDialog(this, "CPF invalido", "Erro", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        }
+        if (cpfCnpj.length() != 11 && cpfCnpj.length() != 14) {
 
-        return false;
-    }
-    if (jtfAlterarTelefone.getText().length() != 16) {
-        JOptionPane.showMessageDialog(this, "Digite corretamente o telefone ", "Erro", JOptionPane.ERROR_MESSAGE);
-        return false;
-    }
+            return false;
+        }
+        if (jtfAlterarTelefone.getText().length() != 16) {
+            JOptionPane.showMessageDialog(this, "Digite corretamente o telefone ", "Erro", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
 
-    if (!jtfAlterarEmail.getText().contains("@")) {
-        JOptionPane.showMessageDialog(this, "Digite um E-mail valido", "Erro", JOptionPane.INFORMATION_MESSAGE);
-        return false;
-    }
+        if (!jtfAlterarEmail.getText().contains("@")) {
+            JOptionPane.showMessageDialog(this, "Digite um E-mail valido", "Erro", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
 
-    return true;
-}
+        return true;
+    }
+//Verifica se os dados digitados na alteração de endereço são validos
 
     public boolean validarEndereco() {
-    if (jtfAlterarCep.getText().length() != 10) {
-        JOptionPane.showMessageDialog(this, "Digite um CEP valido", "Erro", JOptionPane.ERROR_MESSAGE);
-        return false;
+        if (jtfAlterarCep.getText().length() != 10) {
+            JOptionPane.showMessageDialog(this, "Digite um CEP valido", "Erro", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        String rua, bairro, numero;
+        rua = jtfAlterarRua.getText();
+        bairro = jtfAlterarBairro.getText();
+        numero = jtfAlterarNumero.getText();
+        if (rua.isBlank() || bairro.isBlank() || numero.isBlank()) {
+            JOptionPane.showMessageDialog(this, "Digite o endereço completo", "Erro", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+        return true;
     }
-    String rua, bairro, numero;
-    rua = jtfAlterarRua.getText();
-    bairro = jtfAlterarBairro.getText();
-    numero = jtfAlterarNumero.getText();
-    if (rua.isBlank() || bairro.isBlank() || numero.isBlank()) {
-        JOptionPane.showMessageDialog(this, "Digite o endereço completo", "Erro", JOptionPane.INFORMATION_MESSAGE);
-        return false;
-    }
-    return true;
-}
 
+    /*
+    Metodo para pupular o ComboBox "Estados" com os estados onde há Centro de Recebimento
+    com Requisições em Aberto
+     */
     public void populaEstadosComCentro() {
-    EstadoServico estadoServico = new EstadoServico();
-    List<Estado> estadosComCentro = estadoServico.buscaEstadosComCentro(StatusRequisicao.ABERTA);
+        EstadoServico estadoServico = new EstadoServico();
+        List<Estado> estadosComCentro = estadoServico.buscaEstadosComCentro(StatusRequisicao.ABERTA);
 
-    if (estadosComCentro != null) {
-        cbEstadoDoacao.removeAllItems();
-        cbEstadoDoacao.insertItemAt(new Estado("Selecione um Estado", 1), 0);
-        cbEstadoDoacao.setSelectedIndex(0);
-        for (Estado i : estadosComCentro) {
-            cbEstadoDoacao.addItem(i);
+        if (estadosComCentro != null) {
+            cbEstadoDoacao.removeAllItems();
+            cbEstadoDoacao.insertItemAt(new Estado("Selecione um Estado", 1), 0);
+            cbEstadoDoacao.setSelectedIndex(0);
+            for (Estado i : estadosComCentro) {
+                cbEstadoDoacao.addItem(i);
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Não foi possivel encontrar Estados com Centros de Recebimento", "Erro", JOptionPane.ERROR_MESSAGE);
+
         }
-
-    } else {
-        JOptionPane.showMessageDialog(this, "Não foi possivel encontrar Estados com Centros de Recebimento", "Erro", JOptionPane.ERROR_MESSAGE);
 
     }
 
-}
-
+    /*
+    Metodo utilizado para popular o ComboBox "Cidade" comas cidades onde há Centro de Recebimento 
+    com requisições em Aberto a partir do estado selecionado
+     */
     public void populaCidadesComCentro() {
-    CidadeServico cidadeServico = new CidadeServico();
-    Estado uf = (Estado) (cbEstadoDoacao.getSelectedItem());
-    if (uf.getIdEstado() != 1) {
-        List<Cidade> cidadesComCentro = cidadeServico.buscaCidadesComCentroAtivo(uf.getSiglaEstado(), StatusRequisicao.ABERTA);
+        CidadeServico cidadeServico = new CidadeServico();
+        Estado uf = (Estado) (cbEstadoDoacao.getSelectedItem());
+        if (uf.getIdEstado() != 1) {
+            List<Cidade> cidadesComCentro = cidadeServico.buscaCidadesComCentroAtivo(uf.getSiglaEstado(), StatusRequisicao.ABERTA);
 
-        if (cidadesComCentro != null) {
-            cbCidadeDoacao.removeAllItems();
-            cbCidadeDoacao.insertItemAt(new Cidade("Escolha uma Cidade", "X"), 0);
-            cbCidadeDoacao.setSelectedIndex(0);
+            if (cidadesComCentro != null) {
+                cbCidadeDoacao.removeAllItems();
+                cbCidadeDoacao.insertItemAt(new Cidade("Escolha uma Cidade", "X"), 0);
+                cbCidadeDoacao.setSelectedIndex(0);
 
-            for (Cidade i : cidadesComCentro) {
-                cbCidadeDoacao.addItem(i);
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Não foi possivel encontrar Cidades com Centros de Recebimento", "Erro", JOptionPane.ERROR_MESSAGE);
-
-        }
-    }
-}
-
-    public void populaCentro() {
-    CentroRecebimentoServico centroServico = new CentroRecebimentoServico();
-    Cidade cidade = (Cidade) cbCidadeDoacao.getSelectedItem();
-    if (cidade.getEstadoCidade().equals("@")) {
-        List<CentroRecebimento> centros = centroServico.buscaCentroPorCidade(cidade.getNomeCidade(), StatusRequisicao.ABERTA);
-
-        if (centros != null) {
-            cbCentroDoacao.removeAllItems();
-            cbCentroDoacao.insertItemAt(new CentroRecebimento("Selecione um Centro de Recebimento", 0), 0);
-            cbCentroDoacao.setSelectedIndex(0);
-
-            for (CentroRecebimento i : centros) {
-                cbCentroDoacao.addItem(i);
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Não foi possivel encontrar Centros de Recebimento", "Erro", JOptionPane.ERROR_MESSAGE);
-
-        }
-    }
-
-}
-
-    public void populaCategoriasCentro() {
-    CategoriaItemServico categoriaServico = new CategoriaItemServico();
-    CentroRecebimento centro = (CentroRecebimento) cbCentroDoacao.getSelectedItem();
-    if (cbCentroDoacao.getSelectedIndex() != 0) {
-        List<CategoriaItem> categoriasCentro = categoriaServico.buscaCategoriaCentroComStatus(centro.getIdCentroRebebimento(), StatusRequisicao.ABERTA);
-
-        if (categoriasCentro != null) {
-            cbCategoriaDoacao.removeAllItems();
-            cbCategoriaDoacao.insertItemAt(new CategoriaItem("Selecione uma Categoria", 0), 0);
-            cbCategoriaDoacao.setSelectedIndex(0);
-            for (CategoriaItem i : categoriasCentro) {
-                cbCategoriaDoacao.addItem(i);
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Não foi possivel encontrar Categoria no Centros de Recebimento", "Erro", JOptionPane.ERROR_MESSAGE);
-
-        }
-    }
-}
-
-    public void populaTabelaRequisicoes() {
-    modeloTabeloRequisicao.setRowCount(0);
-    RequisicaoServico requisicaoServico = new RequisicaoServico();
-    CentroRecebimento centroSelecionado = (CentroRecebimento) cbCentroDoacao.getSelectedItem();
-    CategoriaItem categoriaSelecionada = (CategoriaItem) cbCategoriaDoacao.getSelectedItem();
-    int idCentroSelecionado = centroSelecionado.getIdCentroRebebimento();
-    int idCategoria = categoriaSelecionada.getIdCategoria();
-
-    if (cbCategoriaDoacao.getSelectedIndex() != 0) {
-        List<Requisicao> requisicoes = requisicaoServico.buscaRequisicoesPorStatus(idCentroSelecionado, idCategoria, StatusRequisicao.ABERTA);
-        if (requisicoes != null) {
-            for (Requisicao i : requisicoes) {
-                Object requisicao[] = {i, i.getQuantidade()};
-                modeloTabeloRequisicao.addRow(requisicao);
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Não foi possivel encontrar Requisiçôes do Centros de Recebimento", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-}
-
-    public void adicionaDoacao() {
-    if (tabelaRequisicao.getSelectedRowCount() != 0) {
-        int row = tabelaRequisicao.getSelectedRow();
-
-        int quantidadeDoar = Integer.parseInt(String.valueOf(jsQuantidade.getValue()));
-        if (quantidadeDoar != 0) {
-            Requisicao requisicaoSeleciona = (Requisicao) tabelaRequisicao.getValueAt(row, 0);
-            Doacao doacao = new Doacao(doadorLogado.getIdDoador(),
-                    requisicaoSeleciona.getIdCentroRequisitor(),
-                    requisicaoSeleciona.getIdRequisicao(),
-                    requisicaoSeleciona.getIdItenRequerido(),
-                    requisicaoSeleciona.getNomeItem(),
-                    quantidadeDoar);
-
-            boolean existe = false;
-
-            for (int i = 0; i < tabelaDoacao.getRowCount(); i++) {
-                Doacao doacaoI = (Doacao) tabelaDoacao.getValueAt(i, 0);
-                if (doacaoI.getIdItemDoado() == doacao.getIdItemDoado()) {
-                    modeloTabelaDoacao.setValueAt(doacao.getQuantidadeDoada(), i, 1);
-                    existe = true;
-
-                    break;
+                for (Cidade i : cidadesComCentro) {
+                    cbCidadeDoacao.addItem(i);
                 }
+            } else {
+                JOptionPane.showMessageDialog(this, "Não foi possivel encontrar Cidades com Centros de Recebimento", "Erro", JOptionPane.ERROR_MESSAGE);
+
             }
+        }
+    }
 
-            if (!existe) {
+    /*
+    Metodo para popular o COmboBox "Centro de Recebimento" com o nome dos Centros de REcebimento 
+    onde há requisições em aberto a partir do Estado e Cidade selecinados
+     */
+    public void populaCentro() {
+        CentroRecebimentoServico centroServico = new CentroRecebimentoServico();
+        Cidade cidade = (Cidade) cbCidadeDoacao.getSelectedItem();
+        if (cidade.getEstadoCidade().equals("@")) {
+            List<CentroRecebimento> centros = centroServico.buscaCentroPorCidade(cidade.getNomeCidade(), StatusRequisicao.ABERTA);
 
-                Object doacaoObjetct[] = {doacao, doacao.getQuantidadeDoada()};
-                modeloTabelaDoacao.addRow(doacaoObjetct);
+            if (centros != null) {
+                cbCentroDoacao.removeAllItems();
+                cbCentroDoacao.insertItemAt(new CentroRecebimento("Selecione um Centro de Recebimento", 0), 0);
+                cbCentroDoacao.setSelectedIndex(0);
+
+                for (CentroRecebimento i : centros) {
+                    cbCentroDoacao.addItem(i);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Não foi possivel encontrar Centros de Recebimento", "Erro", JOptionPane.ERROR_MESSAGE);
+
+            }
+        }
+
+    }
+
+    /*
+    Popula o ComboBox "Categoria" com as categorias dos itens solicitados pelo Centro de Recebimento 
+    selecionado 
+     */
+    public void populaCategoriasCentro() {
+        CategoriaItemServico categoriaServico = new CategoriaItemServico();
+        CentroRecebimento centro = (CentroRecebimento) cbCentroDoacao.getSelectedItem();
+        if (cbCentroDoacao.getSelectedIndex() != 0) {
+            List<CategoriaItem> categoriasCentro = categoriaServico.buscaCategoriaCentroComStatus(centro.getIdCentroRebebimento(), StatusRequisicao.ABERTA);
+
+            if (categoriasCentro != null) {
+                cbCategoriaDoacao.removeAllItems();
+                cbCategoriaDoacao.insertItemAt(new CategoriaItem("Selecione uma Categoria", 0), 0);
+                cbCategoriaDoacao.setSelectedIndex(0);
+                for (CategoriaItem i : categoriasCentro) {
+                    cbCategoriaDoacao.addItem(i);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Não foi possivel encontrar Categoria no Centros de Recebimento", "Erro", JOptionPane.ERROR_MESSAGE);
+
+            }
+        }
+    }
+
+    /*
+    Popula a tebla coma lista de itens solicitados pelo Centro de Recebimento a partir
+    da categoria selecionada
+     */
+    public void populaTabelaRequisicoes() {
+        modeloTabeloRequisicao.setRowCount(0);
+        RequisicaoServico requisicaoServico = new RequisicaoServico();
+        CentroRecebimento centroSelecionado = (CentroRecebimento) cbCentroDoacao.getSelectedItem();
+        CategoriaItem categoriaSelecionada = (CategoriaItem) cbCategoriaDoacao.getSelectedItem();
+        int idCentroSelecionado = centroSelecionado.getIdCentroRebebimento();
+        int idCategoria = categoriaSelecionada.getIdCategoria();
+
+        if (cbCategoriaDoacao.getSelectedIndex() != 0) {
+            List<Requisicao> requisicoes = requisicaoServico.buscaRequisicoesPorStatus(idCentroSelecionado, idCategoria, StatusRequisicao.ABERTA);
+            if (requisicoes != null) {
+                for (Requisicao i : requisicoes) {
+                    Object requisicao[] = {i, i.getQuantidade()};
+                    modeloTabeloRequisicao.addRow(requisicao);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Não foi possivel encontrar Requisiçôes do Centros de Recebimento", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    /*
+    Metodo que adicona o item slecionado e a quantodade informada da tabela de Solicitação para
+    a tabela de Doaçoes
+     */
+    public void adicionaDoacao() {
+        if (tabelaRequisicao.getSelectedRowCount() != 0) {
+            int row = tabelaRequisicao.getSelectedRow();
+
+            int quantidadeDoar = Integer.parseInt(String.valueOf(jsQuantidade.getValue()));
+            if (quantidadeDoar != 0) {
+                Requisicao requisicaoSeleciona = (Requisicao) tabelaRequisicao.getValueAt(row, 0);
+                Doacao doacao = new Doacao(doadorLogado.getIdDoador(),
+                        requisicaoSeleciona.getIdCentroRequisitor(),
+                        requisicaoSeleciona.getIdRequisicao(),
+                        requisicaoSeleciona.getIdItenRequerido(),
+                        requisicaoSeleciona.getNomeItem(),
+                        quantidadeDoar);
+
+                boolean existe = false;
+
+                for (int i = 0; i < tabelaDoacao.getRowCount(); i++) {
+                    Doacao doacaoI = (Doacao) tabelaDoacao.getValueAt(i, 0);
+                    if (doacaoI.getIdItemDoado() == doacao.getIdItemDoado()) {
+                        modeloTabelaDoacao.setValueAt(doacao.getQuantidadeDoada(), i, 1);
+                        existe = true;
+
+                        break;
+                    }
+                }
+
+                if (!existe) {
+
+                    Object doacaoObjetct[] = {doacao, doacao.getQuantidadeDoada()};
+                    modeloTabelaDoacao.addRow(doacaoObjetct);
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(this, "Informe a quantidade que deseja doar", "Quantidade", JOptionPane.INFORMATION_MESSAGE);
+
             }
 
         } else {
-            JOptionPane.showMessageDialog(this, "Informe a quantidade que deseja doar", "Quantidade", JOptionPane.INFORMATION_MESSAGE);
-
+            JOptionPane.showMessageDialog(this, "Selecione um item para doar", "Selecione", JOptionPane.INFORMATION_MESSAGE);
         }
-
-    } else {
-        JOptionPane.showMessageDialog(this, "Selecione um item para doar", "Selecione", JOptionPane.INFORMATION_MESSAGE);
     }
-}
+// Edita a quantidade informada para a Doação selecionada na tabela de Doações
 
     public void editarDoacao() {
-    int quantidadeSelecionada = tabelaDoacao.getSelectedRowCount();
-    if (quantidadeSelecionada != 0) {
-        int row = tabelaDoacao.getSelectedRow();
-        Doacao doacaoEditar = (Doacao) tabelaDoacao.getValueAt(row, 0);
-        EditarItem editor = new EditarItem(this, true);
-        editor.setComponetesRequisicao(doacaoEditar);
-        editor.setVisible(true);
-        if (editor.getReturnStatus() == 1) {
-            int quantidadeEdita = editor.quantidadeAlterada();
-            doacaoEditar.setQuantidadeDoada(quantidadeEdita);
-            tabelaDoacao.setValueAt(doacaoEditar.getQuantidadeDoada(), row, 1);
-        }
+        int quantidadeSelecionada = tabelaDoacao.getSelectedRowCount();
+        if (quantidadeSelecionada != 0) {
+            int row = tabelaDoacao.getSelectedRow();
+            Doacao doacaoEditar = (Doacao) tabelaDoacao.getValueAt(row, 0);
+            EditarItem editor = new EditarItem(this, true);
+            editor.setComponetesEditarDoacao(doacaoEditar);
+            editor.setVisible(true);
+            if (editor.getReturnStatus() == 1) {
+                int quantidadeEdita = editor.getQuantidadeAlterada();
+                doacaoEditar.setQuantidadeDoada(quantidadeEdita);
+                tabelaDoacao.setValueAt(doacaoEditar.getQuantidadeDoada(), row, 1);
+            }
 
-    } else {
-        JOptionPane.showMessageDialog(this, "Selecione um item para alterar a quantidade", "Alterar Quantidade", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecione um item para alterar a quantidade", "Alterar Quantidade", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
-}
+//Remove a Doação selecionada da tabela de Doações 
 
     public void removerDoacao() {
-    int linhasSelecionadas = tabelaDoacao.getSelectedRowCount();
-    if (linhasSelecionadas == 0) {
-        JOptionPane.showMessageDialog(this, "Selecione um item para remover", "Remover", JOptionPane.INFORMATION_MESSAGE);
+        int linhasSelecionadas = tabelaDoacao.getSelectedRowCount();
+        if (linhasSelecionadas == 0) {
+            JOptionPane.showMessageDialog(this, "Selecione um item para remover", "Remover", JOptionPane.INFORMATION_MESSAGE);
 
-    } else {
-        int row = tabelaDoacao.getSelectedRow();
-        Doacao doacaoRemover = (Doacao) tabelaDoacao.getValueAt(row, 0);
-        int v = JOptionPane.showConfirmDialog(this, "Deseja remover a Doação '" + doacaoRemover + "'?", "Remover", JOptionPane.YES_NO_OPTION);
-        if (v == 0) {
-            modeloTabelaDoacao.removeRow(row);
+        } else {
+            int row = tabelaDoacao.getSelectedRow();
+            Doacao doacaoRemover = (Doacao) tabelaDoacao.getValueAt(row, 0);
+            int v = JOptionPane.showConfirmDialog(this, "Deseja remover a Doação '" + doacaoRemover + "'?", "Remover", JOptionPane.YES_NO_OPTION);
+            if (v == 0) {
+                modeloTabelaDoacao.removeRow(row);
+            }
         }
-    }
 
-}
+    }
+//Limpa todas as informações contidas nas tabelas do sistema
 
     public void limpaCampos() {
-    modeloTabelaDoacao.setRowCount(0);
-    modeloTabeloRequisicao.setRowCount(0);
+        modeloTabelaDoacao.setRowCount(0);
+        modeloTabeloRequisicao.setRowCount(0);
+        if (painelDoador.getSelectedIndex() == 1) {
+            cbEstadoDoacao.setSelectedIndex(0);
+            jlItem.setVisible(false);
+            jlQuantidade.setVisible(false);
+            jsQuantidade.setValue(0);
+        }
 
-    cbEstadoDoacao.setSelectedIndex(0);
-
-    jlItem.setVisible(false);
-    jlQuantidade.setVisible(false);
-    jsQuantidade.setValue(0);
-
-}
+    }
+//Realiza as ações necessarias para sair do sistema
 
     public void logOff() {
-    int v = JOptionPane.showConfirmDialog(this, "Realmente deseja Sair?", "Sair", JOptionPane.YES_NO_OPTION);
-    if (v == 0) {
-        UsuarioLogado usuarioLogOf = new UsuarioLogado();
-        usuarioLogOf.logOff();
-        limpaCampos();
-        BoasVindas boasVindas = new BoasVindas();
-        boasVindas.setVisible(true);
-        this.dispose();
+        int v = JOptionPane.showConfirmDialog(this, "Realmente deseja Sair?", "Sair", JOptionPane.YES_NO_OPTION);
+        if (v == 0) {
+            UsuarioLogado usuarioLogOf = new UsuarioLogado();
+            usuarioLogOf.logOff();
+            limpaCampos();
+            BoasVindas boasVindas = new BoasVindas();
+            boasVindas.setVisible(true);
+            this.dispose();
+        }
     }
-}
+//Define a Label de Bem-vindo com o nome do usuario
 
     public void setLabelBemVindo() {
-    String nome = doadorLogado.getNome();
-    String nomeDividido[] = nome.split(" ");
-    jlBemVindo.setText("Bem-Vindo " + nomeDividido[0]);
-}
+        String nome = doadorLogado.getNome();
+        String nomeDividido[] = nome.split(" ");
+        jlBemVindo.setText("Bem-Vindo " + nomeDividido[0]);
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

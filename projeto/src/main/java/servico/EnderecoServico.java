@@ -65,6 +65,7 @@ public class EnderecoServico {
         }
         return endereco;
     }
+// Metodo utilizado para adicionar enderecos dos usuarios cadastrados como Centro de Recebimento
 
     public Endereco slavarEnderecoCentroRecebimento(Endereco enderecoCentro, int idCentroRecebimento) {
         String sql = "INSERT INTO endereco_centro_recebimento "
@@ -111,6 +112,9 @@ public class EnderecoServico {
         return enderecoCentro;
     }
 
+    /*
+    Metodo utilizado para buscar um determinado endereço de Doador a partir do "id_doador"
+     */
     public Endereco buscaEnderecoDoadorPorId(int id_usuario) {
         Endereco enderecoBuscado = new Endereco();
         String sql = ("SELECT id_endereco_doador, id_doador_endereco,rua_doador, bairro_doador,numero_doador,complemento_doador,"
@@ -158,6 +162,10 @@ public class EnderecoServico {
         return enderecoBuscado;
     }
 
+    /*
+    Metodo utilizado para buscar um determinado endereço de um Centro de Recebimento
+    a partir do "id_centro_recebimento"
+     */
     public Endereco buscaEnderecoCentroRecebimentoPorId(int id_centro_recebimento_endereco) {
         Endereco enderecoBuscado = new Endereco();
         String sql = "SELECT id_endereco_centro_recebimento,"
@@ -211,6 +219,10 @@ public class EnderecoServico {
 
     }
 
+    /*
+    Metodo utilizado para atualizar as informações de endereço de um Doador a partir
+    do "id_doador" e as informações fornecidas pela tela de atualizar endereço do sistema
+     */
     public Endereco atualizaEnderecoDoador(Endereco novoEndereco, int idDoador) {
         String sql = "UPDATE endereco_doadores SET rua_doador = ?, bairro_doador = ?, numero_doador= ?,complemento_doador = ?, cep_doador =?,"
                 + "cidade_doador = ?, uf_doador = ? WHERE id_doador_endereco = ?  ";
@@ -245,14 +257,19 @@ public class EnderecoServico {
 
         return novoEndereco;
     }
-    public Endereco atualizarEnderecoCentro(Endereco enderecoAtualizado, int id_centro_recebimento){
-    String sql = "UPDATE endereco_centro_recebimento SET rua_centro_recebimento = ?,"
-            + "bairro_centro_recebimento = ?,"
-            + "nro_centro_recebimento = ?,"
-            + "complemento_centro_recebimento = ?,"
-            + "cidade_centro_recebimento = ?,"
-            + "uf_centro_recebimento = ? WHERE id_centro_recebimento_endereco = ?";
-    
+
+    /*
+    Metodo utilizado para atualizar as informações de endereço de um Centro de Recebimento a partir
+    do "id_centro_recebimento" e as informações fornecidas pela tela de atualizar endereço do sistema
+     */
+    public Endereco atualizarEnderecoCentro(Endereco enderecoAtualizado, int id_centro_recebimento) {
+        String sql = "UPDATE endereco_centro_recebimento SET rua_centro_recebimento = ?,"
+                + "bairro_centro_recebimento = ?,"
+                + "nro_centro_recebimento = ?,"
+                + "complemento_centro_recebimento = ?,"
+                + "cidade_centro_recebimento = ?,"
+                + "uf_centro_recebimento = ? WHERE id_centro_recebimento_endereco = ?";
+
         try {
             conexao = ConexaoBanco.getConnection();
             stmt = conexao.prepareStatement(sql);
@@ -263,14 +280,14 @@ public class EnderecoServico {
             stmt.setString(5, enderecoAtualizado.getCidadeEndereco());
             stmt.setString(6, enderecoAtualizado.getEstadoEndereco());
             stmt.setInt(7, id_centro_recebimento);
-            
+
             stmt.executeUpdate();
             System.out.println("Endereco do Centro de Recebimento atualizado com sucesso");
         } catch (SQLException e) {
             System.out.println("Erro ao atualzar Endereco do Centro de Recebimento " + e.getMessage());
             return null;
         } finally {
-              try {
+            try {
                 if (stmt != null) {
                     stmt.close();
                 }
@@ -280,6 +297,6 @@ public class EnderecoServico {
             }
         }
         return enderecoAtualizado;
-}
-    
+    }
+
 }

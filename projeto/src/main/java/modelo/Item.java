@@ -1,12 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package modelo;
 
 /**
+ *Classe com os dados necessarios dos itens disponiveis para solicitação e doação
+ * utilizados no sistema.
+ * Com seus construtores e metodos
  *
- * @author uilso
+ * 
  */
 public class Item {
     private int idItem;

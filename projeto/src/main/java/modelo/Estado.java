@@ -1,12 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package modelo;
 
 /**
  *Classe com as informacoes necessarias de unidades federatidas.
- * utilizado para popular comboBox com as siglas de estados no sistema
+ * Utilizado para popular comboBox com as siglas de estados no sistema
  * 
  */
 public class Estado {

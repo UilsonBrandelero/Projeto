@@ -9,8 +9,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- *
- * @author uilso
+ *Classe utilizada para estanciar a conexao com o banco de dados
  */
 public class ConexaoBanco {
     

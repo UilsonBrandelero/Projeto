@@ -14,8 +14,8 @@ import modelo.Item;
 import util.ConexaoBanco;
 
 /**
- *
- * @author uilso
+ *Classe utilizada para realizar operações na tabela de itens do banco de dados
+ * 
  */
 public class ItemServico {
  
@@ -25,7 +25,10 @@ public class ItemServico {
 
     public ItemServico() {
     }
-    
+    /*
+    Metodo que busca todos os itens cadastrados a partir de uma determinada categoria 
+    definida pelo paramentro do metodo "id_categira_item"
+    */
     public List<Item> buscaritens(int id_categoria_item){
         List<Item> itens = new ArrayList<>();
         String sql = "SELECT * FROM itens where id_categoria_item = ?";

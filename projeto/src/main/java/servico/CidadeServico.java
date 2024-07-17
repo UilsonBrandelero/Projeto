@@ -16,8 +16,8 @@ import util.ConexaoBanco;
 import util.StatusRequisicao;
 
 /**
- *
- * @author uilso
+ *Classe utilizada para relalizar operacões na tebela de "municipio" no banco de dados
+ * 
  */
 public class CidadeServico {
 
@@ -27,7 +27,10 @@ public class CidadeServico {
 
     public CidadeServico() {
     }
-
+    
+/*
+    Metodo que busca as cidades de um determina estado baseado na sigla do estado "uf"
+    */
     public List<Cidade> listaCidade(String uf) {
         String sql = "Select nome,uf FROM municipio where uf = ? ORDER BY nome";
         List<Cidade> cidades = new ArrayList<>();
@@ -61,7 +64,10 @@ public class CidadeServico {
         }
         return cidades;
     }
-
+/*
+    Metodo que busca pela tabela de requisições somente as cidades de um determinado estado definido "uf_centro_recebimento" 
+    que estao com o "status_requisicao" definido pelo parametro do metodo
+    */
     public List<Cidade> buscaCidadesComCentroAtivo(String uf_centro_recebimento,StatusRequisicao status) {
         List<Cidade> cidades = new ArrayList<>();
         String sql = "SELECT DISTINCT cidade_centro_recebimento FROM requisicao " +

@@ -6,8 +6,13 @@ package view;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 import modelo.CentroRecebimento;
 import modelo.Doador;
 import modelo.Endereco;
@@ -19,7 +24,7 @@ import util.UsuarioLogado;
 
 /**
  *
- * @author uilso
+ * Tela utilizada para realizar Login no sistema
  */
 public class Login extends javax.swing.JFrame {
 
@@ -30,6 +35,7 @@ public class Login extends javax.swing.JFrame {
         initComponents();
         setImagemLogin();
         jlSenha.setVisible(false);
+        eventoBotao();
 
     }
 
@@ -57,7 +63,6 @@ public class Login extends javax.swing.JFrame {
         jPanel1.setForeground(new java.awt.Color(0, 0, 0));
 
         login.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        login.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         tfUsuario.setBackground(new java.awt.Color(255, 255, 255));
         tfUsuario.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -191,6 +196,22 @@ public class Login extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    public void eventoBotao (){
+        botaoLogin.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0), "doClick");
+        botaoLogin.getActionMap().put("doClick", new AbstractAction(){
+            @Override
+            public void actionPerformed(ActionEvent e ){
+                botaoLogin.doClick();
+            }
+        });
+    }
+        
+    
+    
+    
+    
     private void jlCadastreMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlCadastreMouseEntered
         Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
         jlCadastre.setCursor(cursor);
@@ -249,7 +270,7 @@ public class Login extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_tfSenhaKeyReleased
-
+//Realiza o Login de um usuario do tipo Doador
     public void logarDoador() {
         DoadorServico doadorServico = new DoadorServico(); // Esntancia objeto uq faz consulta na tabela de doadores
         EnderecoServico enderecoServico = new EnderecoServico();//Esntancia objeto uq faz consulta na tabela de endereco_doadores
@@ -278,7 +299,7 @@ public class Login extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Dados invalidos", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
-
+//Realiza o Login de um usuario do tipo Centro de Recebimento
     public void logarCentroRecebimento() {
         CentroRecebimentoServico centroServico = new CentroRecebimentoServico();
         EnderecoServico enderecoServico = new EnderecoServico();
@@ -302,17 +323,13 @@ public class Login extends javax.swing.JFrame {
     }
 
     public void setImagemLogin() {
-        ImageIcon iconeLogin = new ImageIcon("src/main/resources/img/login.jpg");
+        ImageIcon iconeLogin = new ImageIcon("src/main/resources/img/login.png");
         iconeLogin.setImage(iconeLogin.getImage().getScaledInstance(140, 140, 1));
         login.setIcon(iconeLogin);
 
     }
 
-    public void setImagemLoginDigitacao() {
-        ImageIcon iconeLogin = new ImageIcon("src/main/resources/img/login2.png");
-
-        loginDigitacao.setIcon(iconeLogin);
-    }
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton botaoLogin;

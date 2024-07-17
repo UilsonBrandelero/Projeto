@@ -18,8 +18,8 @@ import modelo.Item;
 import modelo.Requisicao;
 
 /**
+ * Caixa de dialogo para alterar quantidade de Itens no sistema
  *
- * @author uilso
  */
 public class EditarItem extends javax.swing.JDialog {
 
@@ -35,12 +35,13 @@ public class EditarItem extends javax.swing.JDialog {
     /**
      * Creates new form NewOkCancelDialog
      */
-    public EditarItem(java.awt.Frame parent, boolean modal ) {
+    public EditarItem(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        jlEnunciado.setVisible(false);
 
         // Close the dialog when Esc is pressed
-        String cancelName = "cancel";
+        String cancelName = "Cancelar";
         InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), cancelName);
         ActionMap actionMap = getRootPane().getActionMap();
@@ -57,20 +58,32 @@ public class EditarItem extends javax.swing.JDialog {
     public int getReturnStatus() {
         return returnStatus;
     }
-    public void setComponetes(Item item, int quantidade){
+
+    //Define o nome do item e a quantidade ao editar uma solicitação 
+    public void setComponetes(Item item, int quantidade) {
         jlItem.setText(item.getNomeItem());
         jsQuantidade.setValue(quantidade);
     }
-    public void setComponetesRequisicao(Doacao doacao){
+
+    //Define o nome do item e a quantidade de uma Doação antes de ser executada
+    public void setComponetesEditarDoacao(Doacao doacao) {
         jlItem.setText(doacao.getNomeItemDoado());
-        //jsQuantidade.setModel(modeloSpiner);
+
         jsQuantidade.setValue(doacao.getQuantidadeDoada());
     }
-    
-    public int quantidadeAlterada (){
+
+    //Define o nome do item e a quantidade a partir de uma requisição já realizada
+    public void setComponentesAtualizaRequisicao(Requisicao requisicaoAtualizar) {
+        jlEnunciado.setText("Quantos itens a mais deseja solicitar?");
+        jlItem.setText(requisicaoAtualizar.getNomeItem());
+        jsQuantidade.setValue(0);
+    }
+
+    //retorna a quantidade alterada
+    public int getQuantidadeAlterada() {
         int quantidade = Integer.parseInt(String.valueOf(jsQuantidade.getValue()));
         return quantidade;
-        
+
     }
 
     /**
@@ -86,6 +99,7 @@ public class EditarItem extends javax.swing.JDialog {
         cancelButton = new javax.swing.JButton();
         jlItem = new javax.swing.JLabel();
         jsQuantidade = new javax.swing.JSpinner();
+        jlEnunciado = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -115,6 +129,9 @@ public class EditarItem extends javax.swing.JDialog {
         jsQuantidade.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jsQuantidade.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
 
+        jlEnunciado.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jlEnunciado.setText("Enunciado");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -127,9 +144,12 @@ public class EditarItem extends javax.swing.JDialog {
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(43, 43, 43)
-                .addComponent(jlItem, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jsQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jlEnunciado, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jlItem, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jsQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -138,11 +158,13 @@ public class EditarItem extends javax.swing.JDialog {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(53, 53, 53)
+                .addGap(25, 25, 25)
+                .addComponent(jlEnunciado)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jlItem)
                     .addComponent(jsQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelButton)
                     .addComponent(okButton))
@@ -156,7 +178,7 @@ public class EditarItem extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        quantidadeAlterada();
+        getQuantidadeAlterada();
         doClose(RET_OK);
     }//GEN-LAST:event_okButtonActionPerformed
 
@@ -170,58 +192,18 @@ public class EditarItem extends javax.swing.JDialog {
     private void closeDialog(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_closeDialog
         doClose(RET_CANCEL);
     }//GEN-LAST:event_closeDialog
-    
+
     private void doClose(int retStatus) {
         returnStatus = retStatus;
         setVisible(false);
         dispose();
     }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EditarItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EditarItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EditarItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(EditarItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                EditarItem dialog = new EditarItem(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
+ 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
+    private javax.swing.JLabel jlEnunciado;
     private javax.swing.JLabel jlItem;
     private javax.swing.JSpinner jsQuantidade;
     private javax.swing.JButton okButton;

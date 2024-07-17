@@ -1,13 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package modelo;
 
-
+/*
+*  Classe com dados necessarios para as Categorias de item utilizadas no sistema
+*  Com seus devidos construtores e metodos
+ */
 public class CategoriaItem {
-   private String nomeCategoria;
-   private int idCategoria;
+
+    private String nomeCategoria;
+    private int idCategoria;
 
     public CategoriaItem() {
     }
@@ -35,11 +36,7 @@ public class CategoriaItem {
 
     @Override
     public String toString() {
-        return  this.nomeCategoria;
+        return this.nomeCategoria;
     }
 
-  
-   
-   
-   
 }

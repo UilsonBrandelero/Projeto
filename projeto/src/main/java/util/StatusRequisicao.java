@@ -6,7 +6,7 @@ package util;
 
 /**
  *
- * @author uilso
+ * Enumeração utilizada para padronizar a declaração do Status de um Requisição
  */
 public enum StatusRequisicao {
     ABERTA("ABERTA"),

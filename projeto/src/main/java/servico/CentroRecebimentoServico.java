@@ -17,8 +17,9 @@ import util.StatusRequisicao;
 import util.UsuarioLogado;
 
 /**
+ * Classe utilizada para realizar operações na tabela de "centro_recebimento" no
+ * banco de dados
  *
- * @author uilso
  */
 public class CentroRecebimentoServico {
 
@@ -27,6 +28,7 @@ public class CentroRecebimentoServico {
     ResultSet rs = null;
 
     private static int idCadastroCentroRecebimento;
+//Metodo que insere no banco o cadastro de um novo Centro de recebimento
 
     public CentroRecebimento salvarCentoRecebimento(CentroRecebimento centro) {
         String sql = "INSERT INTO centro_recebimento "
@@ -75,6 +77,10 @@ public class CentroRecebimentoServico {
         return centro;
     }
 
+    /*
+    Metodo que realiza a busca de um Centro de Recebimneto já cadastrado a partir
+    das informações fornecidas na tela de login: Usuario e Senha
+     */
     public boolean consultaCentroRecebimentoLogin(String nome, String senha) {
         String nomeCentro = "";
         String senhaCentro = "";
@@ -109,6 +115,8 @@ public class CentroRecebimentoServico {
                 System.err.println("Não fechou" + e.getMessage());
             }
         }
+        //Verifica se o Usuario e Senha fornecidos no Login são compativeis com as 
+        //informações conidas no banco de dados
         if (nomeCentro.equals(nome) && senhaCentro.equals(senha)) {
             UsuarioLogado usuarioLogado = new UsuarioLogado();
             usuarioLogado.setIdUsuario(idCentro);
@@ -119,6 +127,10 @@ public class CentroRecebimentoServico {
         }
     }
 
+    /**
+    Metodo utilizado para realizar a consulta de dados de um determinado Centro de Recebimento 
+    informando o "id_centro_recebimento"
+     */
     public CentroRecebimento consultaCentroRecebimentoId(int id_centro_recebimento) {
         CentroRecebimento centroRecebimento = new CentroRecebimento();
         String sql = "SELECT id_centro_recebimento,"
@@ -168,7 +180,10 @@ public class CentroRecebimentoServico {
         }
         return centroRecebimento;
     }
-
+/*
+    Metodo utilizado para atualizar os dados de cadastro deum determinado Centro de Recebimento
+    com as informações oriundas da tela de atualizar dados do sistema
+    */
     public CentroRecebimento atualizarDadosCentro(CentroRecebimento centroAtualizado) {
         String sql = "UPDATE centro_recebimento SET nome_completo_centro_recebimento = ?,"
                 + "cpf_cnpj = ?,"
@@ -204,7 +219,11 @@ public class CentroRecebimentoServico {
         }
         return centroAtualizado;
     }
-
+/*
+    Metodo utilixado para remover os registros de um determinado Centro de Recebimento a 
+    partir do id_centro_recebimento.
+    
+    */
     public boolean apagarCentroPorId(int id_centro_recebimento) {
         String sql = "DELETE FROM endereco_centro_recebimento WHERE id_centro_recebimento_endereco = ?;"
                 + "DELETE FROM centro_recebimento WHERE id_centro_recebimento = ?;";
@@ -231,9 +250,10 @@ public class CentroRecebimentoServico {
         }
         return true;
     }
+
     // metodo que busca o ID e o Nome do centro de recebimento baseado na cidade
-    // Bsuca pela tabela de requisição 
-    public List<CentroRecebimento> buscaCentroPorCidade(String cidade,StatusRequisicao status) {
+    // Busca pela tabela de requisição 
+    public List<CentroRecebimento> buscaCentroPorCidade(String cidade, StatusRequisicao status) {
         List<CentroRecebimento> centros = new ArrayList<>();
         String sql = "SELECT DISTINCT id_centro_recebimento, nome_centro_recebimento FROM requisicao "
                 + "JOIN centro_recebimento ON id_centro_recebimento = id_centro_recebimento_requisicao "

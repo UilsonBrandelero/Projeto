@@ -1,18 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
+
 package view;
 
 import java.text.ParseException;
-import java.util.Formatter;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
 import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 import modelo.CentroRecebimento;
@@ -20,16 +17,18 @@ import modelo.Cidade;
 import modelo.Doador;
 import modelo.Endereco;
 import modelo.Estado;
+import modelo.RuaBairro;
 import servico.CentroRecebimentoServico;
 import servico.CidadeServico;
 import servico.DoadorServico;
 import servico.EnderecoServico;
 import servico.EstadoServico;
+import servico.RuaBairroServico;
 import util.VerificaCpf;
 
 /**
+ * Tela para o ususario realizar seu cadastro no sistema
  *
- * @author uilso
  */
 public class Cadastro extends javax.swing.JFrame {
 
@@ -42,6 +41,7 @@ public class Cadastro extends javax.swing.JFrame {
         jlNomeCentro.setVisible(false);
         popularEstados();
         rbCpf.setSelected(true);
+        eventoCep();
 
     }
 
@@ -115,13 +115,12 @@ public class Cadastro extends javax.swing.JFrame {
         jlConfirmarSenha.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jlConfirmarSenha.setText("Confirmar senha");
 
-        jtfCpf.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter()));
+        try {
+            jtfCpf.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
         jtfCpf.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jtfCpf.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jtfCpfKeyReleased(evt);
-            }
-        });
 
         try {
             jtfTelefone.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(##) # ####-####")));
@@ -149,23 +148,8 @@ public class Cadastro extends javax.swing.JFrame {
                 rbCpfItemStateChanged(evt);
             }
         });
-        rbCpf.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                rbCpfStateChanged(evt);
-            }
-        });
 
         rbCnpj.setText("CNPJ");
-        rbCnpj.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                rbCnpjItemStateChanged(evt);
-            }
-        });
-        rbCnpj.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                rbCnpjStateChanged(evt);
-            }
-        });
 
         javax.swing.GroupLayout painelDadosPessoasiLayout = new javax.swing.GroupLayout(painelDadosPessoasi);
         painelDadosPessoasi.setLayout(painelDadosPessoasiLayout);
@@ -324,6 +308,14 @@ public class Cadastro extends javax.swing.JFrame {
             ex.printStackTrace();
         }
         jtfCep.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jtfCep.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jtfCepKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfCepKeyReleased(evt);
+            }
+        });
 
         jtfRua.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
@@ -466,7 +458,24 @@ public class Cadastro extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    public void eventoCep() {
+        jtfCep.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                setRuaBairro();
+            }
 
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                setRuaBairro();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                setRuaBairro();
+            }
+        });
+    }
     private void rbCentroRecebimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbCentroRecebimentoActionPerformed
         jtfNomeCentro.setVisible(true);
         jlNomeCentro.setVisible(true);
@@ -505,53 +514,68 @@ public class Cadastro extends javax.swing.JFrame {
         popularCidades();
     }//GEN-LAST:event_cbEstadoItemStateChanged
 
-    private void rbCnpjItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rbCnpjItemStateChanged
-      jtfCpf.setText("");
-        if(rbCnpj.isSelected()){
-          habilitaCnpj();
-      }
-
-    }//GEN-LAST:event_rbCnpjItemStateChanged
-
     private void rbCpfItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rbCpfItemStateChanged
-           jtfCpf.setText("");
-        if(rbCpf.isSelected()){
-         habilitaCpf();
-    }
+        MaskFormatter mascara = null;
+        jtfCpf.setText("");
+        jtfCpf.setFormatterFactory(new DefaultFormatterFactory(mascara));
+
+        if (rbCpf.isSelected()) {
+            try {
+                mascara = new MaskFormatter("###.###.###-##");
+            } catch (ParseException ex) {
+                Logger.getLogger(Cadastro.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            jtfCpf.setText("");
+        } else {
+            try {
+                mascara = new MaskFormatter("##.###.###/####-##");
+            } catch (ParseException ex) {
+                Logger.getLogger(Cadastro.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            jtfCpf.setText("");
+
+        }
+        jtfCpf.setFormatterFactory(new DefaultFormatterFactory(mascara));
 
     }//GEN-LAST:event_rbCpfItemStateChanged
 
-    private void rbCpfStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_rbCpfStateChanged
-    
-    }//GEN-LAST:event_rbCpfStateChanged
+    private void jtfCepKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfCepKeyReleased
 
-    private void rbCnpjStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_rbCnpjStateChanged
-    
-    }//GEN-LAST:event_rbCnpjStateChanged
 
-    private void jtfCpfKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfCpfKeyReleased
-      
-    }//GEN-LAST:event_jtfCpfKeyReleased
-    public void habilitaCpf(){
+    }//GEN-LAST:event_jtfCepKeyReleased
+
+    private void jtfCepKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfCepKeyPressed
+
+    }//GEN-LAST:event_jtfCepKeyPressed
+    public void habilitaCpf() {
         try {
-            jtfCpf.setFormatterFactory(null);
-            jtfCpf.setText(null);
-            jtfCpf.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("###.###.###-##")));
+
+            jtfCpf.setText("");
+
+            DefaultFormatterFactory mascaraCpf = new DefaultFormatterFactory(new MaskFormatter("###.###.###-##"));
+            jtfCpf.setFormatterFactory(mascaraCpf);
+
+            jtfCpf.setText("");
         } catch (java.text.ParseException ex) {
+            System.out.println("Deu ruim");
             ex.printStackTrace();
         }
     }
+
     public void habilitaCnpj() {
         try {
-            
-            jtfCpf.setFormatterFactory(null);
-            jtfCpf.setText(null);
-            jtfCpf.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("##.###.###/####-##")));
+
+            jtfCpf.setText("");
+            MaskFormatter mascaraCnpj = new MaskFormatter("##.###.###/####-##");
+            jtfCpf.setFormatterFactory(new DefaultFormatterFactory(mascaraCnpj));
+            jtfCpf.setText("");
         } catch (java.text.ParseException ex) {
+            System.out.println("Deu ruim");
             ex.printStackTrace();
         }
 
     }
+//Metodo que valida se os dados foram digitados corretamente
 
     public boolean validarDados() {
         if (jtfNome.getText().isEmpty()) {
@@ -604,6 +628,7 @@ public class Cadastro extends javax.swing.JFrame {
         botoesCpfCnpj.add(rbCnpj);
 
     }
+//Metodo para cadastrar um usuario do tipo Doador
 
     public void cadastrarDoador() {
         Doador doador = new Doador(jtfNome.getText(),
@@ -644,6 +669,7 @@ public class Cadastro extends javax.swing.JFrame {
             }
         }
     }
+//Metodo para cadastar um usuario do tipo Centro de Recebimento
 
     public void cadastrarCentroRecebimento() {
 
@@ -688,7 +714,7 @@ public class Cadastro extends javax.swing.JFrame {
         }
 
     }
-
+//Metodo que popula o ComBox de "estados" no tela, com informaçoes oriundas do banco de dados
     public void popularEstados() {
         EstadoServico estadoServico = new EstadoServico();
         List<Estado> estados = estadoServico.listaEstados();
@@ -697,13 +723,28 @@ public class Cadastro extends javax.swing.JFrame {
         }
 
     }
-
+//Metodo que popula o ComboBox de "Cidades" baseado no "Estado" escolhido com informações do banco de dados
     public void popularCidades() {
         String uf = String.valueOf(cbEstado.getSelectedItem());
         CidadeServico cidadeServ = new CidadeServico();
         List<Cidade> cidades = cidadeServ.listaCidade(uf);
         for (Cidade i : cidades) {
             cbCidade.addItem(i.getNomeCidade());
+        }
+    }
+//Preenche os campos "Rua" e "Bairro" após ser informado o CEP
+    public void setRuaBairro() {
+        RuaBairroServico ruaBairroServico = new RuaBairroServico();
+        String cep = jtfCep.getText().trim().replaceAll("[.-]", "");
+        if (cep.length() == 8) {
+            RuaBairro ruaBairro = ruaBairroServico.buscaRuaBairro(cep);
+            if (ruaBairro != null) {
+                jtfRua.setText(ruaBairro.getRua());
+                jtfBairro.setText(ruaBairro.getBairro());
+            }
+        } else {
+            jtfRua.setText("");
+            jtfBairro.setText("");
         }
     }
 

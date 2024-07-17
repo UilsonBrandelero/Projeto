@@ -1,12 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package modelo;
 
 /**
- *
- * @author uilso
+ * Classe com com os dados necessarios para realizar um doação. 
+ * Com seus metodos e costrutores
+ 
  */
 public class Doacao {
     private int idDoacao;
@@ -16,6 +14,9 @@ public class Doacao {
     private int idItemDoado;
     private String nomeItemDoado;
     private int quantidadeDoada;
+    private String cidadeDoacao;
+    private String ufDoacao;
+    
 
     public Doacao() {
     }
@@ -38,6 +39,14 @@ public class Doacao {
         this.nomeItemDoado = nomeItemDoado;
         this.quantidadeDoada = quantidadeDoada;
     }
+
+    public Doacao(String nomeItemDoado, int quantidadeDoada, String cidadeDoacao, String ufDoacao) {
+        this.nomeItemDoado = nomeItemDoado;
+        this.quantidadeDoada = quantidadeDoada;
+        this.cidadeDoacao = cidadeDoacao;
+        this.ufDoacao = ufDoacao;
+    }
+    
 
    
 
@@ -111,6 +120,22 @@ public class Doacao {
     @Override
     public String toString() {
         return nomeItemDoado;
+    }
+
+    public String getCidadeDoacao() {
+        return cidadeDoacao;
+    }
+
+    public void setCidadeDoacao(String cidadeDoacao) {
+        this.cidadeDoacao = cidadeDoacao;
+    }
+
+    public String getUfDoacao() {
+        return ufDoacao;
+    }
+
+    public void setUfDoacao(String ufDoacao) {
+        this.ufDoacao = ufDoacao;
     }
     
     

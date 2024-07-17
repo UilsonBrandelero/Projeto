@@ -3,8 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package util;
-// 012   456   8 9 10  12 13
-// ### . ### . # #  # - #  #
+/*
+Classe utilizada para validar se o CPF informado no sistema e valido
+*/
 
 public class VerificaCpf {
 

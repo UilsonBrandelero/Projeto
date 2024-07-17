@@ -1,14 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package modelo;
 
 import util.StatusRequisicao;
 
 /**
- *
- * @author uilso
+ *Classe com os dados necessarios para as requisições criadas no sitema.
+ * Tanto para os Centros de Recebimento criarem nosvas requisições e para disponibilizalas
+ * para os doadores realizarem doações
+ * 
  */
 public class Requisicao {
     private int idRequisicao;
@@ -18,28 +17,31 @@ public class Requisicao {
     private int idCategoriaItem;
     private String nomeItem;
     private StatusRequisicao statusRequisicao;
+    private int quantidadeTotalRequisitada;
     
 
     public Requisicao() {
     }
 
-    public Requisicao(int idCentroRequisitor, int idItemRequerido, int quantidade, StatusRequisicao statusRequisicao) {
+    public Requisicao(int idCentroRequisitor, int idItemRequerido, int quantidade, StatusRequisicao statusRequisicao,int quantidadeTotal) {
         this.idCentroRequisitor = idCentroRequisitor;
         this.idItemRequerido = idItemRequerido;
         this.quantidade = quantidade;
         this.statusRequisicao = statusRequisicao;
+        this.quantidadeTotalRequisitada = quantidadeTotal;
     }
 
-    public Requisicao(int idRequisicao, int idCentroRequisitor, int idItemRequerido, int quantidade, StatusRequisicao statusRequisicao) {
+    public Requisicao(int idRequisicao, int idCentroRequisitor, int idItemRequerido, int quantidade, StatusRequisicao statusRequisicao, int quantidadeTotal) {
         this.idRequisicao = idRequisicao;
         this.idCentroRequisitor = idCentroRequisitor;
         this.idItemRequerido = idItemRequerido;
         this.quantidade = quantidade;
         this.statusRequisicao = statusRequisicao;
+        this.quantidadeTotalRequisitada = quantidadeTotal;
     }
     
 
-    public Requisicao(int idRequisicao, int idCentroRequisitor, int idItemRequerido, int quantidade, int idCategoriaItem, String nomeItem, StatusRequisicao statusRequisicao) {
+    public Requisicao(int idRequisicao, int idCentroRequisitor, int idItemRequerido, int quantidade, int idCategoriaItem, String nomeItem, StatusRequisicao statusRequisicao, int quantidadeTotal) {
         this.idRequisicao = idRequisicao;
         this.idCentroRequisitor = idCentroRequisitor;
         this.idItemRequerido = idItemRequerido;
@@ -47,7 +49,11 @@ public class Requisicao {
         this.idCategoriaItem = idCategoriaItem;
         this.nomeItem = nomeItem;
         this.statusRequisicao = statusRequisicao;
+        this.quantidadeTotalRequisitada = quantidadeTotal;
     }
+
+   
+    
 
     
 
@@ -111,6 +117,22 @@ public class Requisicao {
 
     public void setStatusRequisicao(StatusRequisicao ststusRequisicao) {
         this.statusRequisicao = ststusRequisicao;
+    }
+
+    public int getIdItemRequerido() {
+        return idItemRequerido;
+    }
+
+    public void setIdItemRequerido(int idItemRequerido) {
+        this.idItemRequerido = idItemRequerido;
+    }
+
+    public int getQuantidadeTotalRequisitada() {
+        return quantidadeTotalRequisitada;
+    }
+
+    public void setQuantidadeTotalRequisitada(int quantidadeTotalRequisitada) {
+        this.quantidadeTotalRequisitada = quantidadeTotalRequisitada;
     }
     
     

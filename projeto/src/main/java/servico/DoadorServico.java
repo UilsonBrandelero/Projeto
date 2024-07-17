@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package servico;
 
 import java.sql.Connection;
@@ -27,7 +23,7 @@ public class DoadorServico {
 
     String nomeDoador = "";
     String senhaDoador = "";
-    
+
     private static int idCadastroDoador;
 
     public DoadorServico() {
@@ -128,6 +124,11 @@ public class DoadorServico {
 
     }
 
+    /*
+    Metodo utilizado para realizar busca dos registros de um determinado Doador definido
+    a partir do parametro "id_doador" do metodo
+     */
+
     public Doador consultaDoadorPorId(int id_doador) {
         Doador doador = new Doador();
         String sql = "SELECT id_doador, nome_doador, cpf_cnpj,telefone_doador, email_doador,senha_doador FROM doadores WHERE id_doador = ?";
@@ -175,6 +176,10 @@ public class DoadorServico {
         return doador;
     }
 
+    /*
+    Metodo que atualiza os dados de cadastro de um doador a partir das informações 
+    geradas pela tela de atualizar cadastro do sistema
+     */
     public Doador atualizaDoador(Doador doadorAtualizado) {
         String sql = "UPDATE doadores SET nome_doador = ?, cpf_cnpj = ?,telefone_doador = ?, email_doador = ? "
                 + "WHERE id_doador = ? ";
@@ -205,30 +210,33 @@ public class DoadorServico {
         }
         return doadorAtualizado;
     }
-
+/*
+    Metodo que exclui do abnco os regidtros de um determinado Doador a partir de 
+    seu "id_doador" de cadastro
+    */
     public boolean apagarDoadorPorId(int id_doador) {
         String sql = "DELETE FROM endereco_doadores WHERE id_doador_endereco = ?";
-        String sql2 ="DELETE FROM doadores WHERE id_doador = ?;";
+        String sql2 = "DELETE FROM doadores WHERE id_doador = ?;";
         try {
             conexao = ConexaoBanco.getConnection();
 
             stmt = conexao.prepareStatement(sql);
             stmt.setInt(1, id_doador);
-            
+
             stmt.executeUpdate();
-            
+
             stmt = conexao.prepareStatement(sql2);
             stmt.setInt(1, id_doador);
-            
+
             stmt.executeUpdate();
-            
+
             System.out.println("Doador apagado com Sucesso");
 
         } catch (SQLException e) {
             System.out.println("Erro ao apagar doador no id = " + id_doador + e.getMessage());
             return false;
         } finally {
-             try {
+            try {
                 if (stmt != null) {
                     stmt.close();
                 }
