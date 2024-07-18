@@ -11,6 +11,7 @@ import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
@@ -40,7 +41,7 @@ public class EditarItem extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setIcone();
-        
+
         jlEnunciado.setVisible(false);
 
         // Close the dialog when Esc is pressed
@@ -86,6 +87,7 @@ public class EditarItem extends javax.swing.JDialog {
     //retorna a quantidade alterada
     public int getQuantidadeAlterada() {
         int quantidade = Integer.parseInt(String.valueOf(jsQuantidade.getValue()));
+
         return quantidade;
 
     }
@@ -182,8 +184,13 @@ public class EditarItem extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        getQuantidadeAlterada();
-        doClose(RET_OK);
+        int v = getQuantidadeAlterada();
+        if (v != 0) {
+            getQuantidadeAlterada();
+            doClose(RET_OK);
+        } else {
+            JOptionPane.showMessageDialog(this, "Defina um quantidade valida", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
@@ -202,11 +209,11 @@ public class EditarItem extends javax.swing.JDialog {
         setVisible(false);
         dispose();
     }
-    public void setIcone(){
-        this.setIconImage(Toolkit.getDefaultToolkit().getImage("src/main/resources/img/icone.png")); 
+
+    public void setIcone() {
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage("src/main/resources/img/icone.png"));
     }
 
- 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;

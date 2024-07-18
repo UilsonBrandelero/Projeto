@@ -1324,6 +1324,7 @@ public class PrincipalCentroRecebimento extends javax.swing.JFrame {
         List<Requisicao> requisicoes = new ArrayList<>();
         CategoriaItem categoria = (CategoriaItem) cbCategoriaHome.getSelectedItem();
         if(modeloTabelaRequisicaoAberta != null){
+            modeloTabelaRequisicaoAberta.setRowCount(0);
         if (categoria != null) {
             if (categoria.getIdCategoria() != 0) {
                 requisicoes = requisicaoServido.buscaRequisicoesPorStatus(usuario.getIdUsuario(), categoria.getIdCategoria(), StatusRequisicao.ABERTA);
