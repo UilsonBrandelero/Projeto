@@ -4,6 +4,7 @@
  */
 package view;
 
+import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
@@ -49,6 +50,7 @@ public class PrincipalCentroRecebimento extends javax.swing.JFrame {
 
         initComponents();
         setLabelBemVindo();
+        setIcone();
         populaCategoria();
         this.modeloTabelaItensSolicitados = (DefaultTableModel) tabelaItensSolicitados.getModel();
         this.modeloTabelaItens = (DefaultTableModel) tabelaItens.getModel();
@@ -206,6 +208,7 @@ public class PrincipalCentroRecebimento extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tabelaDoacaoHome.setRowHeight(25);
         tabelaDoacaoHome.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelaDoacaoHome.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(tabelaDoacaoHome);
@@ -1359,6 +1362,7 @@ public class PrincipalCentroRecebimento extends javax.swing.JFrame {
                 int quantidadeEditada = editor.getQuantidadeAlterada();
                 requisicaoEditar.setQuantidade(quantidadeEditada);
                 requisicaoServico.salvarRequisicao(requisicaoEditar);
+                popularRequisicaoAberta();
 
             }
         } else {
@@ -1387,6 +1391,9 @@ public class PrincipalCentroRecebimento extends javax.swing.JFrame {
         String nome = centroLogado.getNome();
         String nomeDividido[] = nome.split(" ");
         jlBemVindo.setText("Bem-Vindo " + nomeDividido[0]);
+    }
+    public void setIcone(){
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage("src/main/resources/img/icone.png")); 
     }
 
 

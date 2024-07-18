@@ -1,6 +1,8 @@
 
 package modelo;
 
+import java.sql.Date;
+
 /**
  * Classe com com os dados necessarios para realizar um doação. 
  * Com seus metodos e costrutores
@@ -16,7 +18,8 @@ public class Doacao {
     private int quantidadeDoada;
     private String cidadeDoacao;
     private String ufDoacao;
-    
+    private String nomeCentroDestino;
+    private Date dataDoacao;
 
     public Doacao() {
     }
@@ -59,6 +62,17 @@ public class Doacao {
         this.idItemDoado = idItemDoado;
         this.quantidadeDoada = quantidadeDoada;
     }
+
+    public Doacao(int idDoador, String nomeItemDoado, int quantidadeDoada, String cidadeDoacao, String ufDoacao, String nomeCentroDestino, Date dataDoacao) {
+        this.idDoador = idDoador;
+        this.nomeItemDoado = nomeItemDoado;
+        this.quantidadeDoada = quantidadeDoada;
+        this.cidadeDoacao = cidadeDoacao;
+        this.ufDoacao = ufDoacao;
+        this.nomeCentroDestino = nomeCentroDestino;
+        this.dataDoacao = dataDoacao;
+    }
+    
 
     public int getIdDoacao() {
         return idDoacao;
@@ -137,6 +151,23 @@ public class Doacao {
     public void setUfDoacao(String ufDoacao) {
         this.ufDoacao = ufDoacao;
     }
+
+    public String getNomeCentroDestino() {
+        return nomeCentroDestino;
+    }
+
+    public void setNomeCentroDestino(String nomeCentroDestino) {
+        this.nomeCentroDestino = nomeCentroDestino;
+    }
+
+    public Date getDataDoacao() {
+        return dataDoacao;
+    }
+
+    public void setDataDoacao(Date dataDoacao) {
+        this.dataDoacao = dataDoacao;
+    }
+    
     
     
     

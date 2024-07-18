@@ -4,6 +4,7 @@
  */
 package view;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
@@ -38,6 +39,8 @@ public class EditarItem extends javax.swing.JDialog {
     public EditarItem(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setIcone();
+        
         jlEnunciado.setVisible(false);
 
         // Close the dialog when Esc is pressed
@@ -75,6 +78,7 @@ public class EditarItem extends javax.swing.JDialog {
     //Define o nome do item e a quantidade a partir de uma requisição já realizada
     public void setComponentesAtualizaRequisicao(Requisicao requisicaoAtualizar) {
         jlEnunciado.setText("Quantos itens a mais deseja solicitar?");
+        jlEnunciado.setVisible(true);
         jlItem.setText(requisicaoAtualizar.getNomeItem());
         jsQuantidade.setValue(0);
     }
@@ -197,6 +201,9 @@ public class EditarItem extends javax.swing.JDialog {
         returnStatus = retStatus;
         setVisible(false);
         dispose();
+    }
+    public void setIcone(){
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage("src/main/resources/img/icone.png")); 
     }
 
  

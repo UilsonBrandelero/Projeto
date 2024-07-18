@@ -6,6 +6,9 @@ package view;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Image;
+import java.awt.Toolkit;
+import javax.swing.ImageIcon;
 import util.TipoUsuario;
 import util.UsuarioLogado;
 
@@ -23,6 +26,7 @@ public class BoasVindas extends javax.swing.JFrame {
 
     public BoasVindas() {
         initComponents();
+        setIcone();
 
     }
 
@@ -193,7 +197,9 @@ public class BoasVindas extends javax.swing.JFrame {
     public TipoUsuario getTipoEscolhido() {
         return tipoUsuario;
     }
-
+    public void setIcone(){
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage("src/main/resources/img/icone.png")); 
+    }
    
 
 

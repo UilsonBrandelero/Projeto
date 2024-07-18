@@ -2,6 +2,7 @@
 
 package view;
 
+import java.awt.Toolkit;
 import java.text.ParseException;
 import java.util.List;
 import java.util.logging.Level;
@@ -36,6 +37,7 @@ public class Cadastro extends javax.swing.JFrame {
 
     public Cadastro() {
         initComponents();
+        setIcone();
         juntaBotoes();
         jtfNomeCentro.setVisible(false);
         jlNomeCentro.setVisible(false);
@@ -746,6 +748,9 @@ public class Cadastro extends javax.swing.JFrame {
             jtfRua.setText("");
             jtfBairro.setText("");
         }
+    }
+    public void setIcone(){
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage("src/main/resources/img/icone.png")); 
     }
 
     // private JLabel jlNomeCentroRecebimento;

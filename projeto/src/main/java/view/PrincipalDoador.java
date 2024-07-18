@@ -4,7 +4,10 @@
  */
 package view;
 
+import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
@@ -23,6 +26,7 @@ import modelo.Requisicao;
 import servico.CategoriaItemServico;
 import servico.CentroRecebimentoServico;
 import servico.CidadeServico;
+import servico.DoacaoServico;
 import servico.DoadorServico;
 import servico.EnderecoServico;
 import servico.EstadoServico;
@@ -40,16 +44,20 @@ public class PrincipalDoador extends javax.swing.JFrame {
 
     DefaultTableModel modeloTabeloRequisicao;
     DefaultTableModel modeloTabelaDoacao;
+    DefaultTableModel modeloTabelaDoacoesRealizadas;
     ListSelectionModel selectionModel;
 
     public PrincipalDoador() {
         initComponents();
-
+        setIcone();
         setLabelBemVindo();
         this.modeloTabelaDoacao = (DefaultTableModel) tabelaDoacao.getModel();
         this.modeloTabeloRequisicao = (DefaultTableModel) tabelaRequisicao.getModel();
         this.selectionModel = tabelaRequisicao.getSelectionModel();
+        this.modeloTabelaDoacoesRealizadas = (DefaultTableModel) tabelaDoacoesRealizadas.getModel();
         eventoTabelaRequisicao();
+        populaTabelaDoaçãoRealizada();
+        
 
     }
     UsuarioLogado usuario = new UsuarioLogado();
@@ -67,6 +75,8 @@ public class PrincipalDoador extends javax.swing.JFrame {
 
         painelDoador = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tabelaDoacoesRealizadas = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -136,15 +146,52 @@ public class PrincipalDoador extends javax.swing.JFrame {
             }
         });
 
+        tabelaDoacoesRealizadas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Item", "Quantidade", "Destino ", "Data"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tabelaDoacoesRealizadas.setRowHeight(25);
+        tabelaDoacoesRealizadas.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tabelaDoacoesRealizadas.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane1.setViewportView(tabelaDoacoesRealizadas);
+        if (tabelaDoacoesRealizadas.getColumnModel().getColumnCount() > 0) {
+            tabelaDoacoesRealizadas.getColumnModel().getColumn(0).setResizable(false);
+            tabelaDoacoesRealizadas.getColumnModel().getColumn(0).setPreferredWidth(150);
+            tabelaDoacoesRealizadas.getColumnModel().getColumn(1).setResizable(false);
+            tabelaDoacoesRealizadas.getColumnModel().getColumn(1).setPreferredWidth(50);
+            tabelaDoacoesRealizadas.getColumnModel().getColumn(2).setResizable(false);
+            tabelaDoacoesRealizadas.getColumnModel().getColumn(2).setPreferredWidth(250);
+            tabelaDoacoesRealizadas.getColumnModel().getColumn(3).setResizable(false);
+            tabelaDoacoesRealizadas.getColumnModel().getColumn(3).setPreferredWidth(50);
+        }
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1238, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(56, 56, 56)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 696, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(486, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 683, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(251, Short.MAX_VALUE))
         );
 
         painelDoador.addTab("Home", jPanel1);
@@ -815,6 +862,9 @@ public class PrincipalDoador extends javax.swing.JFrame {
 
     private void painelDoadorStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_painelDoadorStateChanged
         // Condição que atualiza os dados sempre que há alteração das abas do sistema.
+        if(painelDoador.getSelectedIndex() == 0){
+            populaTabelaDoaçãoRealizada();
+        }
         if (painelDoador.getSelectedIndex() == 1) {
             populaEstadosComCentro();
         }
@@ -1286,6 +1336,25 @@ public class PrincipalDoador extends javax.swing.JFrame {
         }
 
     }
+    public void populaTabelaDoaçãoRealizada(){
+        DoacaoServico doacaoServico = new DoacaoServico();
+        List<Doacao> doacaoesRealizadas = new ArrayList<>();
+        SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+        doacaoesRealizadas = doacaoServico.buscaDoacaoPorDoador(usuario.getIdUsuario());
+        if(modeloTabelaDoacoesRealizadas != null){
+            modeloTabelaDoacoesRealizadas.setRowCount(0);
+        if(doacaoesRealizadas != null){
+            for(Doacao d: doacaoesRealizadas){
+                String destino = d.getNomeCentroDestino() +" | "+d.getCidadeDoacao()+"/"+d.getUfDoacao();
+                String dataFormatada = formatoData.format(d.getDataDoacao());
+                Object novaLinha[] = {d.getNomeItemDoado(),d.getQuantidadeDoada(),destino,dataFormatada};
+                modeloTabelaDoacoesRealizadas.addRow(novaLinha);
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "Erro ao buscar Doações realizadas", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        }
+    }
 //Limpa todas as informações contidas nas tabelas do sistema
 
     public void limpaCampos() {
@@ -1318,6 +1387,9 @@ public class PrincipalDoador extends javax.swing.JFrame {
         String nome = doadorLogado.getNome();
         String nomeDividido[] = nome.split(" ");
         jlBemVindo.setText("Bem-Vindo " + nomeDividido[0]);
+    }
+    public void setIcone(){
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage("src/main/resources/img/icone.png")); 
     }
 
 
@@ -1356,6 +1428,7 @@ public class PrincipalDoador extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
@@ -1380,6 +1453,7 @@ public class PrincipalDoador extends javax.swing.JFrame {
     private javax.swing.JTextField jtfAlterarTelefone;
     private javax.swing.JTabbedPane painelDoador;
     private javax.swing.JTable tabelaDoacao;
+    private javax.swing.JTable tabelaDoacoesRealizadas;
     private javax.swing.JTable tabelaRequisicao;
     // End of variables declaration//GEN-END:variables
 }

@@ -6,6 +6,7 @@ package view;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
@@ -33,6 +34,7 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+        setIcone();
         setImagemLogin();
         jlSenha.setVisible(false);
         eventoBotao();
@@ -327,6 +329,9 @@ public class Login extends javax.swing.JFrame {
         iconeLogin.setImage(iconeLogin.getImage().getScaledInstance(140, 140, 1));
         login.setIcon(iconeLogin);
 
+    }
+    public void setIcone(){
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage("src/main/resources/img/icone.png")); 
     }
 
    
