@@ -75,13 +75,14 @@ public class PrincipalCentroRecebimento extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         cbCategoriaHome = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
-        tabelaRequisicaoAberta = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         tabelaDoacaoHome = new javax.swing.JTable();
         jLabel10 = new javax.swing.JLabel();
         jbEditarHome = new javax.swing.JButton();
         jbDeletarHome = new javax.swing.JButton();
         jLabel17 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tabelaRequisicaoAberta = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -137,6 +138,7 @@ public class PrincipalCentroRecebimento extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setResizable(false);
 
         painelCentroRecebimento.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         painelCentroRecebimento.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -159,31 +161,6 @@ public class PrincipalCentroRecebimento extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel4.setText("Categoria");
-
-        tabelaRequisicaoAberta.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Item", "Quantidade Solicitada", "Quantidade Restante"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Integer.class, java.lang.Integer.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, true, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        tabelaRequisicaoAberta.setRowHeight(25);
 
         tabelaDoacaoHome.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -239,6 +216,38 @@ public class PrincipalCentroRecebimento extends javax.swing.JFrame {
         jLabel17.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel17.setText("Solicitações em Aberto");
 
+        tabelaRequisicaoAberta.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Item", "Qtd. Total", "Qtd. Restante"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tabelaRequisicaoAberta.setRowHeight(25);
+        tabelaRequisicaoAberta.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tabelaRequisicaoAberta.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane3.setViewportView(tabelaRequisicaoAberta);
+        if (tabelaRequisicaoAberta.getColumnModel().getColumnCount() > 0) {
+            tabelaRequisicaoAberta.getColumnModel().getColumn(0).setResizable(false);
+            tabelaRequisicaoAberta.getColumnModel().getColumn(0).setPreferredWidth(100);
+            tabelaRequisicaoAberta.getColumnModel().getColumn(1).setResizable(false);
+            tabelaRequisicaoAberta.getColumnModel().getColumn(1).setPreferredWidth(50);
+            tabelaRequisicaoAberta.getColumnModel().getColumn(2).setResizable(false);
+            tabelaRequisicaoAberta.getColumnModel().getColumn(2).setPreferredWidth(50);
+        }
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -249,8 +258,9 @@ public class PrincipalCentroRecebimento extends javax.swing.JFrame {
                         .addGap(23, 23, 23)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(tabelaRequisicaoAberta, javax.swing.GroupLayout.PREFERRED_SIZE, 459, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(50, 50, 50)
+                                .addGap(8, 8, 8)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(83, 83, 83)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jbDeletarHome, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jbEditarHome, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -261,13 +271,14 @@ public class PrincipalCentroRecebimento extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(113, 113, 113)
                         .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 113, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(72, 72, 72)
-                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(62, 62, 62))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(89, 89, 89))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(59, 59, 59))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -275,31 +286,22 @@ public class PrincipalCentroRecebimento extends javax.swing.JFrame {
                 .addGap(27, 27, 27)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel10)
-                        .addGap(71, 71, 71)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel17)
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
-                            .addComponent(cbCategoriaHome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cbCategoriaHome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel10))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jbEditarHome, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tabelaRequisicaoAberta, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jbEditarHome, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jbDeletarHome, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(20, Short.MAX_VALUE))
+                        .addComponent(jbDeletarHome, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
-
-        if (tabelaRequisicaoAberta.getColumnModel().getColumnCount() > 0) {
-            tabelaRequisicaoAberta.getColumnModel().getColumn(0).setResizable(false);
-            tabelaRequisicaoAberta.getColumnModel().getColumn(0).setPreferredWidth(100);
-            tabelaRequisicaoAberta.getColumnModel().getColumn(1).setResizable(false);
-            tabelaRequisicaoAberta.getColumnModel().getColumn(2).setResizable(false);
-        }
 
         painelCentroRecebimento.addTab("Home", jPanel1);
 
@@ -378,9 +380,16 @@ public class PrincipalCentroRecebimento extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.Object.class, java.lang.Integer.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         tabelaItensSolicitados.setColumnSelectionAllowed(true);
@@ -391,7 +400,9 @@ public class PrincipalCentroRecebimento extends javax.swing.JFrame {
         jScrollPane4.setViewportView(tabelaItensSolicitados);
         tabelaItensSolicitados.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         if (tabelaItensSolicitados.getColumnModel().getColumnCount() > 0) {
-            tabelaItensSolicitados.getColumnModel().getColumn(0).setPreferredWidth(150);
+            tabelaItensSolicitados.getColumnModel().getColumn(0).setResizable(false);
+            tabelaItensSolicitados.getColumnModel().getColumn(0).setPreferredWidth(100);
+            tabelaItensSolicitados.getColumnModel().getColumn(1).setResizable(false);
             tabelaItensSolicitados.getColumnModel().getColumn(1).setPreferredWidth(50);
         }
 
@@ -400,18 +411,14 @@ public class PrincipalCentroRecebimento extends javax.swing.JFrame {
         painelListaBancoLayout.setHorizontalGroup(
             painelListaBancoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(painelListaBancoLayout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(painelListaBancoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(painelListaBancoLayout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(painelListaBancoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jbDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jbEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(painelListaBancoLayout.createSequentialGroup()
-                        .addGap(141, 141, 141)
-                        .addComponent(jbSolicitar)))
-                .addContainerGap(35, Short.MAX_VALUE))
+                    .addComponent(jbDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbSolicitar))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
         painelListaBancoLayout.setVerticalGroup(
             painelListaBancoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -421,13 +428,13 @@ public class PrincipalCentroRecebimento extends javax.swing.JFrame {
                         .addGap(44, 44, 44)
                         .addComponent(jbEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jbDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jbDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(78, 78, 78)
+                        .addComponent(jbSolicitar))
                     .addGroup(painelListaBancoLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 373, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jbSolicitar)
-                .addGap(17, 17, 17))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jScrollPane1.setBackground(new java.awt.Color(51, 51, 51));
@@ -537,7 +544,7 @@ public class PrincipalCentroRecebimento extends javax.swing.JFrame {
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(painelAdicionaItens, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(47, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addComponent(painelListaBanco, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -849,9 +856,9 @@ public class PrincipalCentroRecebimento extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(painelCentroRecebimento, javax.swing.GroupLayout.PREFERRED_SIZE, 616, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(painelCentroRecebimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28))
         );
 
         pack();
@@ -962,11 +969,12 @@ public class PrincipalCentroRecebimento extends javax.swing.JFrame {
     }//GEN-LAST:event_painelCentroRecebimentoFocusGained
 
     private void cbCategoriaHomeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbCategoriaHomeItemStateChanged
+        if(modeloTabelaRequisicaoAberta != null){
         if (tabelaRequisicaoAberta.getRowCount() != 0) {
             modeloTabelaRequisicaoAberta.setRowCount(0);
         }
         popularRequisicaoAberta();
-
+        }
 
     }//GEN-LAST:event_cbCategoriaHomeItemStateChanged
 
@@ -1315,7 +1323,7 @@ public class PrincipalCentroRecebimento extends javax.swing.JFrame {
         RequisicaoServico requisicaoServido = new RequisicaoServico();
         List<Requisicao> requisicoes = new ArrayList<>();
         CategoriaItem categoria = (CategoriaItem) cbCategoriaHome.getSelectedItem();
-
+        if(modeloTabelaRequisicaoAberta != null){
         if (categoria != null) {
             if (categoria.getIdCategoria() != 0) {
                 requisicoes = requisicaoServido.buscaRequisicoesPorStatus(usuario.getIdUsuario(), categoria.getIdCategoria(), StatusRequisicao.ABERTA);
@@ -1331,6 +1339,7 @@ public class PrincipalCentroRecebimento extends javax.swing.JFrame {
 
                 }
             }
+        }
         }
     }
 //Popula a tabela que informa as Doaçoes realizadas para o Centro de Recebimento logado
@@ -1429,6 +1438,7 @@ public class PrincipalCentroRecebimento extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JButton jbAdicionar;
