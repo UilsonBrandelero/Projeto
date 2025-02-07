@@ -16,7 +16,7 @@ public class ConexaoBanco {
 
     private static final String URL = "jdbc:postgresql://localhost:5432/projeto";
     private static final String USUARIO = "postgres";
-    private static final String SENHA = "1234";
+    private static final String SENHA = "123456";
 
     public static Connection getConnection() {
         try {
